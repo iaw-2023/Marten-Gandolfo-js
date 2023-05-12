@@ -8,7 +8,7 @@ export default function ProductsPage(){
         fetch('https://marten-gandolfo-laravel.vercel.app/_api/products')
           .then(response => response.json())
           .then(data => setProducts(data))
-          .catch(error => console.log(error) /*TODO handle error*/);
+          .catch(error => console.log(error));
       }, []);
 
     if (products.length === 0) {
