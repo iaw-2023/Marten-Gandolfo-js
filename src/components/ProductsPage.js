@@ -6,7 +6,7 @@ export default function ProductsPage(){
     useEffect(() => {
         fetch('https://marten-gandolfo-laravel.vercel.app/_api/products')
           .then(response => response.json())
-          .then(data => {console.log(data); setProducts(data)})
+          .then(data => setProducts(data))
           .catch(error => console.log(error));
       }, []);
 
