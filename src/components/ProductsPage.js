@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 
 export default function ProductsPage(){
     const [products, setProducts] = useState([]);
@@ -7,8 +8,12 @@ export default function ProductsPage(){
         fetch('https://marten-gandolfo-laravel.vercel.app/_api/products')
           .then(response => response.json())
           .then(data => setProducts(data))
-          .catch(error => console.log(error));
+          .catch(error => console.log(error) /*TODO handle error*/);
       }, []);
+
+    if (products.length === 0) {
+        return <div>Cargando...</div>;
+    }
 
     return (
         <div>
@@ -17,8 +22,12 @@ export default function ProductsPage(){
                 <tbody>
                     {products.map(product => (
                         <tr>
-                            <td><img src={product.product_image} width="150"/></td>
-                            <td>{product.name}</td>
+                            <td>
+                                <Link to={'/products/' + product.id}><img src={product.product_image} alt='' width="150"/></Link>
+                            </td>
+                            <td>
+                                <Link to={'/products/' + product.id}>{product.name} </Link>
+                            </td>
                             <td>${product.price}</td>
                         </tr>
                     ))}
