@@ -5,6 +5,8 @@ export default function CartPage(){
     const [cartItems, setCartItems] = useState([]);
     const [products, setProducts] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
+    const [email, setEmail] = useState(''); // Nuevo estado para el campo de texto
+    const [isEmailValid, setIsEmailValid] = useState(false); // Estado para controlar la validez del campo de texto
 
     console.log(products);
   
@@ -44,6 +46,39 @@ export default function CartPage(){
         localStorage.setItem('cart', JSON.stringify(updatedCartItems));
     };
 
+    const buyItems = async () => {
+        try {
+            const order = {
+                email: email,
+                products: cartItems.map(item => ({
+                    id: item.id,
+                    units: item.units
+                }))
+            };
+        
+            const response = await fetch('https://marten-gandolfo-laravel.vercel.app/_api/orders', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(order)
+            });
+        
+            if (response.ok) {
+                console.log('Orden realizada exitosamente');
+                alert("Orden realizada exitosamente");
+                // Aca se puede agregar lógica adicional, como vaciar el carrito
+            } else {
+                console.error('Error al realizar la orden:', response.status);
+                alert('Error al realizar la orden:', response.status);
+            }
+        } catch (error) {
+            console.error('Error al realizar la orden:', error);
+            alert('Error al realizar la orden:', error);
+        }
+    };
+      
+
     const handleUnitsChange = (itemId, unitsChange) => {
         const updatedCartItems = cartItems.map(item => {
           if (item.id === itemId && item.units + unitsChange > 0) {
@@ -56,7 +91,15 @@ export default function CartPage(){
         });
         setCartItems(updatedCartItems);
         localStorage.setItem('cart', JSON.stringify(updatedCartItems));
+    };
+
+    const handleEmailChange = event => {
+        setEmail(event.target.value);
       };
+    
+    useEffect(() => {
+        setIsEmailValid(email !== '');
+    }, [email]);
 
     return (
         <div>
@@ -102,11 +145,18 @@ export default function CartPage(){
                                 <td>TOTAL</td>
                                 <td></td>
                                 <td>${getTotalPrice()}</td>
-                                <td></td>
+                                <td>
+                                    <input
+                                        type="text"
+                                        value={email}
+                                        onChange={handleEmailChange}
+                                        placeholder="Ingrese su email"
+                                    />
+                                    <button onClick={() => buyItems()} disabled={!isEmailValid} >Comprar</button>
+                                </td>
                             </tr>
                         </tbody>
                     </table>
-                
             }
         </div>
     );

@@ -5,6 +5,7 @@ import ProductsPage from './components/ProductsPage'
 import CartPage from './components/CartPage';
 import OrdersPage from './components/OrdersPage';
 import ProductDetailsPage from './components/ProductDetailsPage';
+import OrderDetailsPage from './components/OrderDetailsPage';
 import NavBar from './components/NavBar';
 
 function App() {
@@ -18,6 +19,7 @@ function App() {
           <Route path="/products/:id" element={<ProductDetailsPage />} />
           <Route path="/cart" element={<CartPage />} />
           <Route path="/orders" element={<OrdersPage />} />
+          <Route path="/orders/:token/details" element={<OrderDetailsPage />} />
         </Routes>
       </div>
     </Router>
