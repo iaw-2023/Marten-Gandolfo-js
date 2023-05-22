@@ -1,13 +1,15 @@
 import React, { useEffect, useState } from 'react';
+import { useRef } from 'react';
 import { Link } from 'react-router-dom';
 
 export default function ProductsPage(){
     const [products, setProducts] = useState([]);
     const [categories, setCategories] = useState([]);
     const [searchTerm, setSearchTerm] = useState('');
-    const [searchResults, setSearchResults] = useState([]);
+    const [selectedCategory, setSelectedCategory] = useState(-1);
     const [isLoadingProducts, setIsLoadingProducts] = useState(true);
     const [isLoadingCategories, setIsLoadingCategories] = useState(true);
+    const inputRef = useRef(null);
 
     useEffect(() => {
         fetch('https://marten-gandolfo-laravel.vercel.app/_api/categories')
@@ -26,26 +28,22 @@ export default function ProductsPage(){
           .catch(error => console.log(error));
       }, []);
 
-    const searchProducts = () => {
-        const results = products.filter(
-            (product) => product.name.toLowerCase().includes(searchTerm)
-        );
-        setSearchResults(results);
-    }
-
-    const handleSearch = (event) => {
-        const term = event.target.value.toLowerCase();
-        setSearchTerm(term);
+    const handleSearch = () => {
+        setIsLoadingProducts(true);
+        setSearchTerm(inputRef.current.value.toLowerCase());
     };
 
     const handleCategoryUpdate = (event) => {
         setIsLoadingProducts(true);
-        const category = event.target.value;
-        let url;
-        if(category == -1)
-            url = 'https://marten-gandolfo-laravel.vercel.app/_api/products';
-        else
-            url = 'https://marten-gandolfo-laravel.vercel.app/_api/products/category/' + category;
+        setSelectedCategory(event.target.value);
+    };
+
+    useEffect(() => {
+        let url = 'https://marten-gandolfo-laravel.vercel.app/_api/products';
+        if(searchTerm != '')
+            url += '/search/' + searchTerm;
+        if(selectedCategory != -1)
+            url += '/category/' + selectedCategory;
 
         fetch(url)
           .then(response => response.json())
@@ -54,11 +52,7 @@ export default function ProductsPage(){
             setIsLoadingProducts(false);
           })
           .catch(error => console.log(error));
-    };
-
-    useEffect(() => {
-        searchProducts();
-      }, [searchTerm, products]);
+      }, [searchTerm, selectedCategory]);
 
     if (isLoadingCategories) {
         return <div>Cargando...</div>;
@@ -75,22 +69,25 @@ export default function ProductsPage(){
                 </select>
             </div>
 
-            <input
-                type="text"
-                placeholder="Buscar producto..."
-                value={searchTerm}
-                onChange={handleSearch}
-                style={{ marginBottom: '1rem' }}
-            />
-            
+            <div>
+                <input
+                    type="text"
+                    placeholder="Buscar producto..."
+                    ref={inputRef}
+                    style={{ marginBottom: '1rem' }}
+                />
+                <button onClick={handleSearch}>Buscar</button>
+            </div>
+
             {isLoadingProducts ? (
                 <div>Cargando...</div>
              ) : (
-                <>
-
+                products.length == 0 ? (
+                    <div>No se encontraron productos</div>
+                ) : (
                     <table className="table table-striped table-bordered shadow-lg">
                         <tbody>
-                        {searchResults.map((product) => (
+                        {products.map((product) => (
                             <tr key={product.id}>
                             <td>
                                 <Link to={'/products/' + product.id}>
@@ -105,7 +102,7 @@ export default function ProductsPage(){
                         ))}
                         </tbody>
                     </table>
-                </>
+                )
             )}
             
         </div>
