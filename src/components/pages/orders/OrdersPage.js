@@ -19,12 +19,12 @@ function OrdersPage() {
     return (
         <div>
             <h1>Pedidos</h1>
-            <p>Ingrese el token de su pedido a continuacion para ver mas informacion.</p>
+            <p>Ingrese el codigo de su pedido a continuacion para ver mas informacion.</p>
             <input
                 type="text"
                 value={token}
                 onChange={handleTokenChange}
-                placeholder="Ingrese su token"
+                placeholder="Ingrese su codigo"
             />
             
             <button className="button-link" onClick={handleButtonClick} disabled={!isTokenValid}>Buscar</button>

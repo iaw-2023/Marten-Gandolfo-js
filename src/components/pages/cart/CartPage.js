@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import CartTable from './CartTable';
 
 export default function CartPage(){
     const [cartItems, setCartItems] = useState([]);
@@ -33,12 +33,6 @@ export default function CartPage(){
     
         fetchProductDetails();
       }, []);
-
-    const getTotalPrice = () => {
-        const subtotals = cartItems.map(item => products[item.id].price * item.units);
-        const totalPrice = subtotals.reduce((accumulator, currentValue) => accumulator + currentValue, 0);
-        return totalPrice.toFixed(2);
-    }
 
     const handleRemoveItem = (itemId) => {
         const updatedCartItems = cartItems.filter(item => item.id !== itemId);
@@ -110,53 +104,16 @@ export default function CartPage(){
                 cartItems.length === 0 ?
                     <div>Carrito de compras vacío</div>
                 :
-                    <table>
-                        <thead>
-                            <tr>
-                                <th></th>
-                                <th>Producto</th>
-                                <th>Unidades</th>
-                                <th>Subtotal</th>
-                                <th></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {cartItems.map(item => (
-                            <tr key={item.id}>
-                                <td>
-                                    <Link to={'/products/' + item.id}><img src={products[item.id].product_image} alt='' width="150" /></Link>
-                                </td>
-                                <td>
-                                    <Link to={'/products/' + item.id}>{products[item.id].name}</Link>
-                                </td>
-                                <td>
-                                    <button onClick={() => handleUnitsChange(item.id, -1)}>-</button>
-                                    {item.units}
-                                    <button onClick={() => handleUnitsChange(item.id, 1)}>+</button>
-                                </td>
-                                <td>${(item.units * products[item.id].price).toFixed(2)}</td>
-                                <td>
-                                    <button onClick={() => handleRemoveItem(item.id)}>Eliminar</button>
-                                </td>
-                            </tr>
-                            ))}
-                            <tr>
-                                <td></td>
-                                <td>TOTAL</td>
-                                <td></td>
-                                <td>${getTotalPrice()}</td>
-                                <td>
-                                    <input
-                                        type="text"
-                                        value={email}
-                                        onChange={handleEmailChange}
-                                        placeholder="Ingrese su email"
-                                    />
-                                    <button onClick={() => buyItems()} disabled={!isEmailValid} >Comprar</button>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
+                    <>
+                        <CartTable cartItems={cartItems} products={products} handleUnitsChange={handleUnitsChange} handleRemoveItem={handleRemoveItem}/>
+                        <input
+                            type="text"
+                            value={email}
+                            onChange={handleEmailChange}
+                            placeholder="Ingrese su email"
+                        />
+                        <button onClick={() => buyItems()} disabled={!isEmailValid} >Comprar</button>
+                    </>
             }
         </div>
     );
