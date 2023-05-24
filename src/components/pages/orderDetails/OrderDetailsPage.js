@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import OrderDetailsTable from './OrderDetailsTable';
+import LoadingSpinner from '../../LoadingSpinner';
 
 function OrderDetailsPage() {
   const { token } = useParams();
@@ -25,7 +26,7 @@ function OrderDetailsPage() {
   }, [token]);
 
   if (isLoading) {
-    return <div>Cargando...</div>;
+    return <LoadingSpinner />;
   }
 
   if (!order) {

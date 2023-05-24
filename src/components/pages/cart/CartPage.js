@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import CartTable from './CartTable';
+import LoadingSpinner from '../../LoadingSpinner';
 
 export default function CartPage(){
     const [cartItems, setCartItems] = useState([]);
@@ -99,7 +100,7 @@ export default function CartPage(){
         <div>
             <h1>Carrito de compras</h1>
             {isLoading ? 
-                <div>Cargando...</div>
+                <LoadingSpinner />
             :
                 cartItems.length === 0 ?
                     <div>Carrito de compras vacío</div>

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useRef } from 'react';
 import ProductsTable from './ProductsTable';
 import ProductsFilters from './ProductsFilters';
+import LoadingSpinner from '../../LoadingSpinner';
 
 export default function ProductsPage(){
     const [products, setProducts] = useState([]);
@@ -75,7 +76,7 @@ export default function ProductsPage(){
       }, [searchTerm, selectedCategory]);
 
     if (isLoadingCategories) {
-        return <div>Cargando...</div>;
+        return <LoadingSpinner />;
     }
 
     return (
@@ -84,7 +85,7 @@ export default function ProductsPage(){
             <ProductsFilters categories={categories} handleCategoryUpdate={handleCategoryUpdate} handleSearch={handleSearch} inputRef={inputRef}/>
 
             {isLoadingProducts ? (
-                <div>Cargando...</div>
+                <LoadingSpinner />
              ) : (
                 products.data.length == 0 ? (
                     <div>No se encontraron productos</div>

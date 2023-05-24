@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
+import LoadingSpinner from '../../LoadingSpinner';
 
 function ProductDetailsPage() {
   const { id } = useParams();
@@ -40,7 +41,7 @@ function ProductDetailsPage() {
   };
 
   if (isLoading) {
-    return <div>Cargando...</div>;
+    return <LoadingSpinner />;
   }
 
   if (!product) {
