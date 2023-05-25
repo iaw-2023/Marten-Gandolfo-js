@@ -1,15 +1,17 @@
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from "react-router-dom";
 
 function OrdersPage() {
     const [token, setToken] = useState('');
     const [isTokenValid, setIsTokenValid] = useState(false);
+    const navigate = useNavigate();
 
     const handleTokenChange = event => {
         setToken(event.target.value);
     };
 
     const handleButtonClick = () => {
-        window.location.href = `/orders/${token}/details`;
+        navigate(`/orders/${token}/details`);
     };
 
     useEffect(() => {
@@ -19,7 +21,7 @@ function OrdersPage() {
     return (
         <div>
             <h1>Pedidos</h1>
-            <p>Ingrese el codigo de su pedido a continuacion para ver mas informacion.</p>
+            <p>Ingrese el código de su pedido a continuación para ver mas información.</p>
             <input
                 type="text"
                 value={token}
