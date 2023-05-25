@@ -1,4 +1,4 @@
-export default function ProductsFilters({categories, handleCategoryUpdate, handleSearch, inputRef}){
+export default function ProductsFilters({categories, handleCategoryUpdate, handleSearch, searchRef: searchRef}){
     return (
         <>
             <div>
@@ -13,7 +13,7 @@ export default function ProductsFilters({categories, handleCategoryUpdate, handl
                 <input
                     type="text"
                     placeholder="Buscar producto..."
-                    ref={inputRef}
+                    ref={searchRef}
                     style={{ marginBottom: '1rem' }}
                 />
                 <button onClick={handleSearch}>Buscar</button>

@@ -1,5 +1,4 @@
-import React, { useEffect, useState } from 'react';
-import { useRef } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import ProductsTable from './ProductsTable';
 import ProductsFilters from './ProductsFilters';
 import LoadingSpinner from '../../LoadingSpinner';
@@ -13,7 +12,7 @@ export default function ProductsPage(){
     const [isLoadingProducts, setIsLoadingProducts] = useState(true);
     const [isLoadingCategories, setIsLoadingCategories] = useState(true);
     const [errorMessage, setErrorMessage] = useState('');
-    const inputRef = useRef(null);
+    const searchRef = useRef(null);
 
     const fetchProducts = (url) => {
         fetch(url)
@@ -50,7 +49,7 @@ export default function ProductsPage(){
 
     const handleSearch = () => {
         setIsLoadingProducts(true);
-        setSearchTerm(inputRef.current.value.toLowerCase());
+        setSearchTerm(searchRef.current.value.toLowerCase());
     };
 
     const handleCategoryUpdate = (event) => {
@@ -92,7 +91,7 @@ export default function ProductsPage(){
     return (
         <>
             <h1>Productos</h1>
-            <ProductsFilters categories={categories} handleCategoryUpdate={handleCategoryUpdate} handleSearch={handleSearch} inputRef={inputRef}/>
+            <ProductsFilters categories={categories} handleCategoryUpdate={handleCategoryUpdate} handleSearch={handleSearch} searchRef={searchRef}/>
 
             {isLoadingProducts ? (
                 <LoadingSpinner />
