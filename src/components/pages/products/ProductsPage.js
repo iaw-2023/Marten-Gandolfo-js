@@ -3,6 +3,7 @@ import { useRef } from 'react';
 import ProductsTable from './ProductsTable';
 import ProductsFilters from './ProductsFilters';
 import LoadingSpinner from '../../LoadingSpinner';
+import ErrorMessage from '../../ErrorMessage';
 
 export default function ProductsPage(){
     const [products, setProducts] = useState([]);
@@ -11,23 +12,40 @@ export default function ProductsPage(){
     const [selectedCategory, setSelectedCategory] = useState(-1);
     const [isLoadingProducts, setIsLoadingProducts] = useState(true);
     const [isLoadingCategories, setIsLoadingCategories] = useState(true);
+    const [errorMessage, setErrorMessage] = useState('');
     const inputRef = useRef(null);
 
-    useEffect(() => {
-        fetch('https://marten-gandolfo-laravel.vercel.app/_api/categories')
-          .then(response => response.json())
-          .then((data) => {
-            setCategories(data);
-            setIsLoadingCategories(false);
+    const fetchProducts = (url) => {
+        fetch(url)
+          .then(response => {
+            if(!response.ok) throw new Error('Error al cargar los productos');
+            return response.json();
           })
-          .catch(error => console.log(error));
-        fetch('https://marten-gandolfo-laravel.vercel.app/_api/products')
-          .then(response => response.json())
           .then((data) => {
             setProducts(data);
             setIsLoadingProducts(false);
           })
-          .catch(error => console.log(error));
+          .catch(error => {
+            setIsLoadingProducts(false);
+            setErrorMessage(error.message);
+        });
+    }
+
+    useEffect(() => {
+        fetch('https://marten-gandolfo-laravel.vercel.app/_api/categories')
+          .then(response => {
+            if(!response.ok) throw new Error('Error al cargar las categorías');
+            return response.json();
+          })
+          .then((data) => {
+            setIsLoadingCategories(false);
+            return setCategories(data);
+          })
+          .catch(error => {
+            setIsLoadingCategories(false);
+            setErrorMessage(error.message);
+        });
+        fetchProducts('https://marten-gandolfo-laravel.vercel.app/_api/products');
       }, []);
 
     const handleSearch = () => {
@@ -49,13 +67,7 @@ export default function ProductsPage(){
         console.log(url);
         if(url != null){
             setIsLoadingProducts(true);
-            fetch(url)
-                .then(response => response.json())
-                .then((data) => {
-                    setProducts(data);
-                    setIsLoadingProducts(false);
-                })
-                .catch(error => console.log(error));
+            fetchProducts(url);
         }
     };
 
@@ -66,17 +78,15 @@ export default function ProductsPage(){
         if(selectedCategory != -1)
             url += '/category/' + selectedCategory;
 
-        fetch(url)
-          .then(response => response.json())
-          .then((data) => {
-            setProducts(data);
-            setIsLoadingProducts(false);
-          })
-          .catch(error => console.log(error));
+        fetchProducts(url);
       }, [searchTerm, selectedCategory]);
 
     if (isLoadingCategories) {
         return <LoadingSpinner />;
+    }
+
+    if(errorMessage){
+        return <ErrorMessage message={errorMessage} />;
     }
 
     return (

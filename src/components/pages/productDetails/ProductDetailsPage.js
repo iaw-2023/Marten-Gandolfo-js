@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import LoadingSpinner from '../../LoadingSpinner';
+import Alert from '../../Alert';
+import ErrorMessage from '../../ErrorMessage';
 
 function ProductDetailsPage() {
   const { id } = useParams();
@@ -9,11 +11,15 @@ function ProductDetailsPage() {
   const cartItems = JSON.parse(localStorage.getItem('cart')) || [];
   const cartItem = cartItems.filter(item => item.id == id).pop();
   const [units, setUnits] = useState(cartItem ? cartItem.units : 1);
+  const [showAlert, setShowAlert] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
 
   useEffect(() => {
     fetch(`https://marten-gandolfo-laravel.vercel.app/_api/products/${id}`)
       .then(response => {
-        if(!response.ok) throw new Error('Product not found');
+        if(response.status === 400) throw new Error('Código de producto inválido');
+        if(response.status === 404) throw new Error('Producto no encontrado');
+        if(!response.ok) throw new Error('Error al cargar el producto');
         return response.json();
       })
       .then(data => {
@@ -22,7 +28,7 @@ function ProductDetailsPage() {
       })
       .catch(error => {
         setIsLoading(false);
-        console.log(error);
+        setErrorMessage(error.message);
     });
   }, [id]);
 
@@ -37,15 +43,19 @@ function ProductDetailsPage() {
     cart = cart.filter(item => item.id !== product.id);
     const updatedCart = units > 0 ? [...cart, cartItem] : cart;
     localStorage.setItem('cart', JSON.stringify(updatedCart));
-    alert("Producto agregado al carrito");
+
+    setShowAlert(true);
+    setTimeout(() => {
+      setShowAlert(false);
+    }, 3000);
   };
 
   if (isLoading) {
     return <LoadingSpinner />;
   }
 
-  if (!product) {
-    return <div>Producto no encontrado</div>;
+  if (errorMessage) {
+    return <ErrorMessage message={errorMessage} />;
   }
 
   return (
@@ -63,6 +73,7 @@ function ProductDetailsPage() {
         <button onClick={() => handleUnitsChange(1)}>+</button>
       </div>
       <button onClick={addToCart}>Agregar al carrito</button>
+      <Alert message={"Producto agregado al carrito"} showAlert={showAlert}/>
     </div>
   );
 }

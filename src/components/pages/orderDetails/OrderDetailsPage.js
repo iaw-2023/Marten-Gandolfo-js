@@ -2,26 +2,29 @@ import React, { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import OrderDetailsTable from './OrderDetailsTable';
 import LoadingSpinner from '../../LoadingSpinner';
+import ErrorMessage from '../../ErrorMessage';
 
 function OrderDetailsPage() {
   const { token } = useParams();
   const [order, setOrder] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [errorMessage, setErrorMessage] = useState('');
 
   useEffect(() => {
     fetch(`https://marten-gandolfo-laravel.vercel.app/_api/orders/${token}`)
       .then(response => {
-        if(!response.ok) throw new Error('Order not found');
+        if(response.status === 400) throw new Error('Código inválido');
+        if(response.status === 404) throw new Error('Pedido no encontrado');
+        if(!response.ok) throw new Error('Error al cargar el pedido');
         return response.json();
       })
       .then(data => {
         setIsLoading(false);
-        console.log(data);
         return setOrder(data);
       })
       .catch(error => {
         setIsLoading(false);
-        console.log(error);
+        setErrorMessage(error.message);
     });
   }, [token]);
 
@@ -29,8 +32,8 @@ function OrderDetailsPage() {
     return <LoadingSpinner />;
   }
 
-  if (!order) {
-    return <div>Pedido no encontrado</div>;
+  if (errorMessage) {
+    return <ErrorMessage message={errorMessage} />;
   }
 
   return (
