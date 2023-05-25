@@ -1,4 +1,4 @@
-export default function ProductsFilters({categories, handleCategoryUpdate, handleSearch, searchRef: searchRef}){
+export default function ProductsFilters({categories, handleCategoryUpdate, handleOrderUpdate, handleSearch, searchRef: searchRef}){
     return (
         <>
             <div>
@@ -17,6 +17,14 @@ export default function ProductsFilters({categories, handleCategoryUpdate, handl
                     style={{ marginBottom: '1rem' }}
                 />
                 <button onClick={handleSearch}>Buscar</button>
+            </div>
+
+            <div>
+                Seleccione orden de precios
+                <select name="priceOrder" id="priceOrder" onChange={handleOrderUpdate}>
+                    <option value="desc">Precios descendentes</option>
+                    <option value="asc">Precios ascendentes</option>
+                </select>
             </div>
         </>
     );
