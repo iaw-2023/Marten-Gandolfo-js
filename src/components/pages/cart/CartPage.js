@@ -93,7 +93,8 @@ export default function CartPage(){
       };
     
     useEffect(() => {
-        setIsEmailValid(email !== '');
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        setIsEmailValid(emailRegex.test(email));
     }, [email]);
 
     return (
