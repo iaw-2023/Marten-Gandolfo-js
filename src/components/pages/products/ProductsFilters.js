@@ -21,7 +21,7 @@ export default function ProductsFilters({categories, handleCategoryUpdate, handl
                 <div class="filter-row">
 
                     <div class="input-group mb-3">
-                        <input type="text" ref={searchRef} class="form-control" placeholder="Nombre del producto" aria-label="Recipient's username" aria-describedby="button-addon2"/>
+                        <input type="text" ref={searchRef} class="form-control" placeholder="Nombre del producto"/>
                         <button class="btn btn-outline-secondary" type="button" id="button-addon2" onClick={handleSearch}>Buscar</button>
                     </div>
 

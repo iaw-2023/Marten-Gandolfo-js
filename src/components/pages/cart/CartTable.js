@@ -8,14 +8,14 @@ export default function CartTable({cartItems, products, handleUnitsChange, handl
     }
 
     return (
-        <table>
+        <table class="table text-center align-middle">
             <thead>
                 <tr>
-                    <th></th>
-                    <th>Producto</th>
-                    <th>Unidades</th>
-                    <th>Subtotal</th>
-                    <th></th>
+                    <th class="p-3"></th>
+                    <th class="p-3">Producto</th>
+                    <th class="p-3">Unidades</th>
+                    <th class="p-3">Subtotal</th>
+                    <th class="p-3"></th>
                 </tr>
             </thead>
             <tbody>
@@ -28,13 +28,33 @@ export default function CartTable({cartItems, products, handleUnitsChange, handl
                         <Link to={'/products/' + item.id}>{products[item.id].name}</Link>
                     </td>
                     <td>
-                        <button onClick={() => handleUnitsChange(item.id, -1)}>-</button>
+
+                        <nav aria-label="Page navigation example">
+                            <ul class="pagination justify-content-center">
+                                <li class="page-item">
+                                    <button class="page-link" onClick={() => handleUnitsChange(item.id, -1)} aria-label="Previous">
+                                        <span aria-hidden="true">-</span>
+                                    </button>
+                                </li>
+                                <li class="page-item">
+                                    <a class="page-link disabled">{item.units}</a>
+                                </li>
+                                <li class="page-item">
+                                    <button class="page-link" onClick={() => handleUnitsChange(item.id, 1)} aria-label="Next">
+                                        <span aria-hidden="true">+</span>
+                                    </button>
+                                </li>
+                            </ul>
+                        </nav>
+
+                        {/* <button onClick={() => handleUnitsChange(item.id, -1)}>-</button>
                         {item.units}
-                        <button onClick={() => handleUnitsChange(item.id, 1)}>+</button>
+                        <button onClick={() => handleUnitsChange(item.id, 1)}>+</button> */}
+
                     </td>
                     <td>${(item.units * products[item.id].price).toFixed(2)}</td>
                     <td>
-                        <button onClick={() => handleRemoveItem(item.id)}>Eliminar</button>
+                        <button class="btn btn-danger mt-3 mb-3" onClick={() => handleRemoveItem(item.id)}>Eliminar</button>
                     </td>
                 </tr>
                 ))}
@@ -43,6 +63,7 @@ export default function CartTable({cartItems, products, handleUnitsChange, handl
                     <td>TOTAL</td>
                     <td></td>
                     <td>${getTotalPrice()}</td>
+                    <td></td>
                 </tr>
             </tbody>
         </table>

@@ -108,13 +108,26 @@ export default function CartPage(){
                 :
                     <>
                         <CartTable cartItems={cartItems} products={products} handleUnitsChange={handleUnitsChange} handleRemoveItem={handleRemoveItem}/>
-                        <input
+                        
+                        <div class="card" style={{margin: '30px'}}>
+                            <h5 class="card-header">Confirmar compra</h5>
+                            <div class="card-body">
+                                <h5 class="card-title">Ingrese su correo a continuacion</h5>
+                                <div class="input-group mb-3">
+                                    <input type="text" value={email} onChange={handleEmailChange} class="form-control" placeholder="Ingrese aquí su correo"/>
+                                    <button onClick={() => buyItems()} disabled={!isEmailValid} class="btn btn-primary">Comprar</button>
+                                </div>
+                                <p class="card-text">Al realizar esta compra usted confirma que ha leido los terminos y condiciones.</p>
+                            </div>
+                        </div>
+
+                        {/* <input
                             type="text"
                             value={email}
                             onChange={handleEmailChange}
                             placeholder="Ingrese su email"
                         />
-                        <button onClick={() => buyItems()} disabled={!isEmailValid} >Comprar</button>
+                        <button onClick={() => buyItems()} disabled={!isEmailValid} >Comprar</button> */}
                     </>
             }
         </div>
