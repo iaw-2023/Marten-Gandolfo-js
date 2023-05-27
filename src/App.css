@@ -36,3 +36,28 @@
     transform: rotate(360deg);
   }
 }
+
+.nav-link:focus,
+.nav-link:active {
+  border-bottom: 3px solid blue;
+}
+
+.card-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  margin-left: 30px;  /* Agrega un margen negativo a la izquierda */
+  margin-right: 30px;  /* Agrega un margen negativo a la derecha */
+}
+
+.card {
+  margin-bottom: 30px;
+}
+
+.filter-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  margin-left: 30px;  /* Agrega un margen negativo a la izquierda */
+  margin-right: 30px;  /* Agrega un margen negativo a la derecha */
+}
