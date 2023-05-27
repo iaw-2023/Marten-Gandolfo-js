@@ -60,7 +60,44 @@ function ProductDetailsPage() {
 
   return (
     <div>
-      <h1>{product.name}</h1>
+
+      <div class="card text-center" style={{margin: '30px'}}>
+        <div class="card-header">
+          {product.brand}
+        </div>
+        <div class="card-body">
+          <img src={product.product_image} alt='' width="250"/>
+          <h5 class="card-title">{product.name}</h5>
+          <p class="card-text">${product.price} x unidad</p>
+          <p class="card-text">{product.description}</p>
+          <nav aria-label="Page navigation example">
+            <ul class="pagination justify-content-center">
+                <li class="page-item">
+                    <button class="page-link" onClick={() => handleUnitsChange(-1)} aria-label="Previous">
+                        <span aria-hidden="true">-</span>
+                    </button>
+                </li>
+                <li class="page-item">
+                    <a class="page-link disabled"><span>{units}</span> unidades.</a>
+                </li>
+                <li class="page-item">
+                    <button class="page-link" onClick={() => handleUnitsChange(1)} aria-label="Next">
+                        <span aria-hidden="true">+</span>
+                    </button>
+                </li>
+            </ul>
+          </nav>
+          <button class="btn btn-primary mt-3 mb-3" onClick={addToCart}>Agregar al carrito</button>
+          <Alert message={"Producto agregado al carrito"} showAlert={showAlert}/>
+        </div>
+        <div class="card-footer text-body-secondary">
+          <a href={product.product_official_site}>{product.product_official_site}</a>
+        </div>
+      </div>
+
+
+
+      {/* <h1>{product.name}</h1>
       <img src={product.product_image} alt='' width="150"/>
       <p>Precio: ${product.price}</p>
       <p>Marca: {product.brand}</p>
@@ -73,7 +110,7 @@ function ProductDetailsPage() {
         <button onClick={() => handleUnitsChange(1)}>+</button>
       </div>
       <button onClick={addToCart}>Agregar al carrito</button>
-      <Alert message={"Producto agregado al carrito"} showAlert={showAlert}/>
+      <Alert message={"Producto agregado al carrito"} showAlert={showAlert}/> */}
     </div>
   );
 }
