@@ -8,13 +8,13 @@ export default function OrderDetailsTable({order}){
     });
 
     return (
-        <table>
+        <table class="table text-center align-middle">
             <thead>
                 <tr>
-                    <th></th>
-                    <th>Producto</th>
-                    <th>Unidades</th>
-                    <th>Subtotal</th>
+                    <th class="p-3"></th>
+                    <th class="p-3">Producto</th>
+                    <th class="p-3">Unidades</th>
+                    <th class="p-3">Subtotal</th>
                 </tr>
             </thead>
             

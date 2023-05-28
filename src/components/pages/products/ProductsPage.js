@@ -108,8 +108,9 @@ export default function ProductsPage(){
 
     return (
         <>
-            <h1>Productos</h1>
-            <ProductsFilters categories={categories} handleCategoryUpdate={handleCategoryUpdate} handleOrderUpdate={handleOrderUpdate} handleSearch={handleSearch} searchRef={searchRef}/>
+            <div class="mt-3">
+                <ProductsFilters categories={categories} handleCategoryUpdate={handleCategoryUpdate} handleOrderUpdate={handleOrderUpdate} handleSearch={handleSearch} searchRef={searchRef}/>
+            </div>
 
             {isLoadingProducts ? (
                 <LoadingProducts />

@@ -99,7 +99,10 @@ export default function CartPage(){
 
     return (
         <div>
-            <h1>Carrito de compras</h1>
+            <div class="borderBottom text-center">
+                <h1>Carrito de compras</h1>
+                <img style={{padding: '20px'}} src="cart.png" width="200px" alt="..."/>
+            </div>
             {isLoading ? 
                 <LoadingSpinner />
             :
