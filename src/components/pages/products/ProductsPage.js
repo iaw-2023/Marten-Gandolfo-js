@@ -2,14 +2,19 @@ import React, { useEffect, useState, useRef } from 'react';
 import ProductsTable from './ProductsTable';
 import ProductsFilters from './ProductsFilters';
 import LoadingSpinner from '../../LoadingSpinner';
+import LoadingProducts from '../../LoadingProducts';
 import ErrorMessage from '../../ErrorMessage';
+import 'bootstrap/dist/css/bootstrap.css';
+import { Link } from 'react-router-dom';
+import '../../../App.css';
+import ProductCard from '../home/ProductCard';
 
 export default function ProductsPage(){
     const [products, setProducts] = useState([]);
     const [categories, setCategories] = useState([]);
     const [searchTerm, setSearchTerm] = useState('');
     const [selectedCategory, setSelectedCategory] = useState(-1);
-    const [selectedOrder, setSelectedOrder] = useState('desc');
+    const [selectedOrder, setSelectedOrder] = useState(-1);
     const [isLoadingProducts, setIsLoadingProducts] = useState(true);
     const [isLoadingCategories, setIsLoadingCategories] = useState(true);
     const [errorMessage, setErrorMessage] = useState('');
@@ -52,13 +57,11 @@ export default function ProductsPage(){
 
     const handleSearch = () => {
         setIsLoadingProducts(true);
-        //setSelectedOrder(-1)
         setSearchTerm(searchRef.current.value.toLowerCase());
     };
 
     const handleCategoryUpdate = (event) => {
         setIsLoadingProducts(true);
-        //setSelectedOrder(-1)
         setSelectedCategory(event.target.value);
     };
 
@@ -96,7 +99,7 @@ export default function ProductsPage(){
       }, [searchTerm, selectedCategory, selectedOrder]);
 
     if (isLoadingCategories) {
-        return <LoadingSpinner />;
+        return <LoadingProducts />;
     }
 
     if(errorMessage){
@@ -105,18 +108,44 @@ export default function ProductsPage(){
 
     return (
         <>
-            <h1>Productos</h1>
-            <ProductsFilters categories={categories} handleCategoryUpdate={handleCategoryUpdate} handleOrderUpdate={handleOrderUpdate} handleSearch={handleSearch} searchRef={searchRef}/>
+            <div class="mt-3">
+                <ProductsFilters categories={categories} handleCategoryUpdate={handleCategoryUpdate} handleOrderUpdate={handleOrderUpdate} handleSearch={handleSearch} searchRef={searchRef}/>
+            </div>
 
             {isLoadingProducts ? (
-                <LoadingSpinner />
+                <LoadingProducts />
              ) : (
-                products.data.length == 0 ? (
-                    <div>No se encontraron productos</div>
-                ) : (
-                    <ProductsTable products={products} handlePageChange={handlePageChange} />
-                )
+                <div class="card-container">
+                    {products.data.map((product) => (
+                        <ProductCard product={product}></ProductCard>
+                    ))}
+                </div>
+
+                
+                // products.data.length == 0 ? (
+                //     <div>No se encontraron productos</div>
+                // ) : (
+                //     <ProductsTable products={products} handlePageChange={handlePageChange} />
+                // )
             )}
+
+            <nav aria-label="Page navigation example">
+                <ul class="pagination justify-content-center">
+                    <li class="page-item">
+                        <button class="page-link" onClick={() => handlePageChange(-1)} aria-label="Previous">
+                            <span aria-hidden="true">&laquo;</span>
+                        </button>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link disabled">Página actual <span>{products.current_page}</span></a>
+                    </li>
+                    <li class="page-item">
+                        <button class="page-link" onClick={() => handlePageChange(1)} aria-label="Next">
+                            <span aria-hidden="true">&raquo;</span>
+                        </button>
+                    </li>
+                </ul>
+            </nav>
             
         </>
     );

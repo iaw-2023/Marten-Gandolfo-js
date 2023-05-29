@@ -4,6 +4,7 @@ import { useParams } from 'react-router-dom';
 import OrderDetailsTable from './OrderDetailsTable';
 import LoadingSpinner from '../../LoadingSpinner';
 import ErrorMessage from '../../ErrorMessage';
+import 'bootstrap/dist/css/bootstrap.css';
 
 function OrdersPage() {
     const {token} = useParams();
@@ -53,27 +54,42 @@ function OrdersPage() {
 
     return (
         <div>
-            <h1>Pedidos</h1>
-            <p>Ingrese el código de su pedido a continuación para ver mas información.</p>
-            <input
-                type="text"
-                ref={tokenRef}
-                onChange={handleTokenChange}
-                placeholder="Ingrese su codigo"
-            />
+            <div class="card" style={{margin: '30px'}}>
+                <div class="row align-items-center">
+                    <div class="col-sm-4 text-center">
+                        <h1>Pedidos</h1>
+                        <img src="shopping_bag.png" width="200px" alt="..."/>
+                    </div>
+                    <div class="col-sm-8 text-center">
+                        <div class="card-body">
+                            <h5 class="card-title">Consulte su pedido aqui</h5>
+                            <p class="card-text">Para poder verlo, debera ingresar el token enviado a su correo a continuacion.</p>
+                            <div class="input-group mb-3">
+                                <input type="text" ref={tokenRef} onChange={handleTokenChange} class="form-control" placeholder="Ingrese su token"/>
+                                <button onClick={handleButtonClick} disabled={!isTokenValid} class="button-link btn btn-primary">Buscar pedido</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                    {showOrder &&
+                    (isLoading ? 
+                        <LoadingSpinner />
+                    : (
+                        <>
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item">
+                                    <h2>Detalles de su pedido</h2>
+                                    <p>Numero de pedido: {order.id}</p>
+                                    <p>Fecha: {order.order_date}</p>
+                                    <OrderDetailsTable order={order} />
+                                    <p class="card-text">Para consultar otro pedido ingrese un token nuevamente.</p>
+                                </li>
+                            </ul>
+                        </>
+                    ))}
+            </div>
+
             
-            <button className="button-link" onClick={handleButtonClick} disabled={!isTokenValid}>Buscar</button>
-            {showOrder &&
-                (isLoading ? 
-                    <LoadingSpinner />
-                : (
-                    <>
-                        <h2>Detalles de su pedido</h2>
-                        <p>Numero de pedido: {order.id}</p>
-                        <p>Fecha: {order.order_date}</p>
-                        <OrderDetailsTable order={order} />
-                    </>
-            ))}
         </div>
     );
 }
