@@ -27,8 +27,10 @@ export default function HomePage() {
 
 
   return (
-    <div class="text-center">
-      <h1>Bienvenidos a Master Gaming</h1>
+    <div>
+      <div class="text-center">
+        <h1>Bienvenidos a Master Gaming</h1>
+      </div>
       {isLoading ? (
         <LoadingSpinner />
       ) : errorMessage ? (
