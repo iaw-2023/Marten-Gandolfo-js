@@ -3,6 +3,7 @@ import CartTable from './CartTable';
 import LoadingSpinner from '../../LoadingSpinner';
 import 'bootstrap/dist/css/bootstrap.css';
 import { Toast } from 'bootstrap/dist/js/bootstrap.bundle';
+import ErrorMessage from '../../ErrorMessage';
 
 export default function CartPage(){
     const [cartItems, setCartItems] = useState([]);
@@ -10,8 +11,6 @@ export default function CartPage(){
     const [isLoading, setIsLoading] = useState(true);
     const [email, setEmail] = useState(''); // Nuevo estado para el campo de texto
     const [isEmailValid, setIsEmailValid] = useState(false); // Estado para controlar la validez del campo de texto
-
-    console.log(products);
   
     useEffect(() => {
         const cartItems = JSON.parse(localStorage.getItem('cart')) || [];
@@ -111,8 +110,15 @@ export default function CartPage(){
         setIsEmailValid(emailRegex.test(email));
     }, [email]);
 
+    let errorMessage = '';
+    if(products.hasOwnProperty(undefined)){
+        localStorage.setItem('cart', JSON.stringify([]));
+        errorMessage = 'Error al cargar productos';
+    }
+
     return (
         <div>
+            {errorMessage  && <ErrorMessage message={errorMessage} />}
             <div class="borderBottom text-center">
                 <h1>Carrito de compras</h1>
                 <img style={{padding: '20px'}} src="cart.png" width="200px" alt="..."/>
@@ -120,7 +126,7 @@ export default function CartPage(){
             {isLoading ? 
                 <LoadingSpinner />
             :
-                cartItems.length === 0 ?
+                cartItems.length === 0 || errorMessage ?
                     <>
                         <h3 class="text-center">Todavía no hay nada por acá</h3>
                         <div class="text-center">
