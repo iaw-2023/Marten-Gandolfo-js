@@ -25,12 +25,9 @@ export default function ProductsCarousel({products}){
         console.log(windowWidth);
       };
   
-      handleResize(); // Call the function on initial render
-  
-      // Add event listener to handle window resize
+      handleResize();
       window.addEventListener('resize', handleResize);
   
-      // Clean up the event listener on component unmount
       return () => {
         window.removeEventListener('resize', handleResize);
       };
