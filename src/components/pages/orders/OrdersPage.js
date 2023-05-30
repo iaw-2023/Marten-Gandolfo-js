@@ -58,7 +58,7 @@ function OrdersPage() {
                 <div class="row align-items-center">
                     <div class="col-sm-4 text-center">
                         <h1>Pedidos</h1>
-                        <img src="shopping_bag.png" width="200px" alt="..."/>
+                        <img src="/shopping_bag.png" width="200px" alt="..."/>
                     </div>
                     <div class="col-sm-8 text-center">
                         <div class="card-body">
