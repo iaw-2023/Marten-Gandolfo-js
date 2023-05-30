@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import CartTable from './CartTable';
 import LoadingSpinner from '../../LoadingSpinner';
 import 'bootstrap/dist/css/bootstrap.css';
@@ -125,7 +126,7 @@ export default function CartPage(){
                         <h3 class="text-center">Todavía no hay nada por acá</h3>
                         <div class="text-center">
                             <p>No sabes que comprar? Comprate todo!</p>
-                            <a type="button" href="https://mastergaming-iaw2023.vercel.app/products" class="btn btn-primary btn-sm">Ver productos</a>
+                            <Link type="button" to="/products" class="btn btn-primary btn-sm">Ver productos</Link>
                         </div>
                     </>
                 :

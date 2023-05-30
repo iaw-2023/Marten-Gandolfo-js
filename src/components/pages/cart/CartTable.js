@@ -37,7 +37,7 @@ export default function CartTable({cartItems, products, handleUnitsChange, handl
                                     </button>
                                 </li>
                                 <li class="page-item">
-                                    <a class="page-link disabled">{item.units}</a>
+                                    <div class="page-link disabled">{item.units}</div>
                                 </li>
                                 <li class="page-item">
                                     <button class="page-link" onClick={() => handleUnitsChange(item.id, 1)} aria-label="Next">
