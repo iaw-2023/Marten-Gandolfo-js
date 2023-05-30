@@ -108,34 +108,39 @@ export default function ProductsPage(){
                 <LoadingProducts />
              ) : (                
                 products.data.length == 0 ? (
-                    <div>No se encontraron productos</div>
+                    <>
+                        <h3 class="text-center">Acá no vendemos de esos</h3>
+                        <p class="text-center">Pero podes buscar otras cosas que tenemos un montón!</p>
+                    </>
                 ) : (
-                    <div class="card-container">
-                        {products.data.map((product) => (
-                            <ProductCard product={product}></ProductCard>
-                        ))}
-                    </div>
+                    <>
+                        <div class="card-container">
+                            {products.data.map((product) => (
+                                <ProductCard product={product}></ProductCard>
+                            ))}
+                        </div>
+
+                        <nav aria-label="Page navigation example">
+                            <ul class="pagination justify-content-center">
+                                <li class="page-item">
+                                    <button class="page-link" onClick={() => handlePageChange(-1)} aria-label="Previous">
+                                        <span aria-hidden="true">&laquo;</span>
+                                    </button>
+                                </li>
+                                <li class="page-item">
+                                    <a class="page-link disabled">Página actual <span>{products.current_page}</span></a>
+                                </li>
+                                <li class="page-item">
+                                    <button class="page-link" onClick={() => handlePageChange(1)} aria-label="Next">
+                                        <span aria-hidden="true">&raquo;</span>
+                                    </button>
+                                </li>
+                            </ul>
+                        </nav>
+                    </>
                 )
             )}
 
-            <nav aria-label="Page navigation example">
-                <ul class="pagination justify-content-center">
-                    <li class="page-item">
-                        <button class="page-link" onClick={() => handlePageChange(-1)} aria-label="Previous">
-                            <span aria-hidden="true">&laquo;</span>
-                        </button>
-                    </li>
-                    <li class="page-item">
-                        <a class="page-link disabled">Página actual <span>{products.current_page}</span></a>
-                    </li>
-                    <li class="page-item">
-                        <button class="page-link" onClick={() => handlePageChange(1)} aria-label="Next">
-                            <span aria-hidden="true">&raquo;</span>
-                        </button>
-                    </li>
-                </ul>
-            </nav>
-            
         </>
     );
 }
