@@ -63,9 +63,9 @@ export default function CartTable({cartItems, products, handleUnitsChange, handl
                 ))}
                 <tr>
                     <td></td>
-                    <td>TOTAL</td>
                     <td></td>
-                    <td>${getTotalPrice()}</td>
+                    <td><b>TOTAL:</b></td>
+                    <td><b>${getTotalPrice()}</b></td>
                     <td></td>
                 </tr>
             </tbody>
