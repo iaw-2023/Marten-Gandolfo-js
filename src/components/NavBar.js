@@ -1,28 +1,7 @@
-import { Link, useLocation } from 'react-router-dom';
-import { useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import '../App.css';
 
 export default function NavBar(){
-    const location = useLocation();
-
-    useEffect(() => {
-        const handleNavLinkClick = (e) => {
-            if (e.currentTarget.pathname === location.pathname) {
-                window.location.reload();
-            }
-        };
-
-        const navLinks = document.querySelectorAll('.nav-link');
-        navLinks.forEach((link) => {
-            link.addEventListener('click', handleNavLinkClick);
-        });
-
-        return () => {
-            navLinks.forEach((link) => {
-                link.removeEventListener('click', handleNavLinkClick);
-            });
-        };
-    }, [location]);
 
     return(
         <nav class="navbar navbar-expand-lg mb-1" style={{ backgroundColor: '#F0F0F0' }}>
