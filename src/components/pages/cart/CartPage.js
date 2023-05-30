@@ -63,6 +63,7 @@ export default function CartPage(){
                 console.log('Orden realizada exitosamente');
                 alert("Orden realizada exitosamente");
                 localStorage.setItem('cart', JSON.stringify([]));
+                setCartItems([]);
             } else {
                 console.error('Error al realizar la orden:', response.status);
                 alert('Error al realizar la orden:', response.status);
