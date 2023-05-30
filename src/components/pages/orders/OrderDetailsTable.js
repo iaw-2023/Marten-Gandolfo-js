@@ -24,7 +24,7 @@ export default function OrderDetailsTable({order}){
                     <td></td>
                     <td></td>
                     <td>TOTAL:</td>
-                    <td>${totalCost}</td>
+                    <td>${totalCost.toFixed(2)}</td>
                 </tr>
             </tbody>
         </table>

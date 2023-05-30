@@ -121,7 +121,13 @@ export default function CartPage(){
                 <LoadingSpinner />
             :
                 cartItems.length === 0 ?
-                    <div>Carrito de compras vacío</div>
+                    <>
+                        <h3 class="text-center">Todavía no hay nada por acá</h3>
+                        <div class="text-center">
+                            <p>No sabes que comprar? Comprate todo!</p>
+                            <a type="button" href="https://mastergaming-iaw2023.vercel.app/products" class="btn btn-primary btn-sm">Ver productos</a>
+                        </div>
+                    </>
                 :
                     <>
                         <CartTable cartItems={cartItems} products={products} handleUnitsChange={handleUnitsChange} handleRemoveItem={handleRemoveItem}/>
