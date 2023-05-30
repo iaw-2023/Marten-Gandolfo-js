@@ -62,7 +62,7 @@ export default function CartPage(){
             if (response.ok) {
                 console.log('Orden realizada exitosamente');
                 alert("Orden realizada exitosamente");
-                // Aca se puede agregar lógica adicional, como vaciar el carrito
+                localStorage.setItem('cart', JSON.stringify([]));
             } else {
                 console.error('Error al realizar la orden:', response.status);
                 alert('Error al realizar la orden:', response.status);
