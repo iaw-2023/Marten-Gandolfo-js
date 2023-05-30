@@ -14,15 +14,15 @@ export default function ProductCard({product}){
         //     </div>
         // </Link>
 
-        <Link to={'/products/' + product.id} style={{ textDecoration: 'none' }}>
             <div class="card" style={{width: "18rem"}}>
-                <img src={product.product_image} class="card-img-top" alt="" style={{ height: "12rem", objectFit: "cover" }} />
-                <div class="card-body" style={{ height: "8rem" }}>
-                    <h5 class="card-title">{product.name}</h5>
-                    <p class="card-text">${product.price}</p>
-                </div>
+                <Link to={'/products/' + product.id} style={{ textDecoration: 'none', color: 'black'}}>
+                    <img src={product.product_image} class="card-img-top" alt="" style={{ height: "12rem", objectFit: "cover" }} />
+                    <div class="card-body" style={{ height: "8rem" }}>
+                        <h5 class="card-title">{product.name}</h5>
+                        <p class="card-text">${product.price}</p>
+                    </div>
+                </Link>
             </div>
-        </Link>
 
     );
 }
