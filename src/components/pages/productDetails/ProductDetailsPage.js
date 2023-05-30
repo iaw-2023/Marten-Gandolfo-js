@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import LoadingSpinner from '../../LoadingSpinner';
-import Alert from '../../Alert';
 import ErrorMessage from '../../ErrorMessage';
 import 'bootstrap/dist/css/bootstrap.css';
 import { Toast } from 'bootstrap/dist/js/bootstrap.bundle';
@@ -15,7 +14,6 @@ function ProductDetailsPage() {
   const [units, setUnits] = useState(cartItem ? cartItem.units : 1);
   const [showAlert, setShowAlert] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
-  const [showToast, setShowToast] = useState(false);
 
   useEffect(() => {
     fetch(`https://marten-gandolfo-laravel.vercel.app/_api/products/${id}`)

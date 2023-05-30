@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import CartTable from './CartTable';
 import LoadingSpinner from '../../LoadingSpinner';
+import 'bootstrap/dist/css/bootstrap.css';
+import { Toast } from 'bootstrap/dist/js/bootstrap.bundle';
 
 export default function CartPage(){
     const [cartItems, setCartItems] = useState([]);
@@ -41,6 +43,18 @@ export default function CartPage(){
         localStorage.setItem('cart', JSON.stringify(updatedCartItems));
     };
 
+    const handleToastSuccessShow = () => {
+        const toastElement = document.getElementById('liveToastSuccess');
+        const toast = new Toast(toastElement);
+        toast.show();
+    };
+
+    const handleToastFailureShow = () => {
+        const toastElement = document.getElementById('liveToastFailure');
+        const toast = new Toast(toastElement);
+        toast.show();
+    };
+
     const buyItems = async () => {
         try {
             const order = {
@@ -61,20 +75,19 @@ export default function CartPage(){
         
             if (response.ok) {
                 console.log('Orden realizada exitosamente');
-                alert("Orden realizada exitosamente");
+                handleToastSuccessShow();
                 localStorage.setItem('cart', JSON.stringify([]));
                 setCartItems([]);
             } else {
                 console.error('Error al realizar la orden:', response.status);
-                alert('Error al realizar la orden:', response.status);
+                handleToastFailureShow();
             }
         } catch (error) {
             console.error('Error al realizar la orden:', error);
-            alert('Error al realizar la orden:', error);
+            handleToastFailureShow();
         }
     };
-      
-
+    
     const handleUnitsChange = (itemId, unitsChange) => {
         const updatedCartItems = cartItems.map(item => {
           if (item.id === itemId && item.units + unitsChange > 0) {
@@ -119,21 +132,40 @@ export default function CartPage(){
                                 <h5 class="card-title">Ingrese su correo a continuacion</h5>
                                 <div class="input-group mb-3">
                                     <input type="text" value={email} onChange={handleEmailChange} class="form-control" placeholder="Ingrese aquí su correo"/>
-                                    <button onClick={() => buyItems()} disabled={!isEmailValid} class="btn btn-primary">Comprar</button>
+                                    <button onClick={buyItems} disabled={!isEmailValid} class="btn btn-primary">Comprar</button>
                                 </div>
                                 <p class="card-text">Al realizar esta compra usted confirma que ha leido los terminos y condiciones.</p>
                             </div>
                         </div>
-
-                        {/* <input
-                            type="text"
-                            value={email}
-                            onChange={handleEmailChange}
-                            placeholder="Ingrese su email"
-                        />
-                        <button onClick={() => buyItems()} disabled={!isEmailValid} >Comprar</button> */}
                     </>
             }
+
+            <div class="toast-container position-fixed bottom-0 end-0 p-3 data-bs-delay=10">
+                <div id="liveToastSuccess" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+                    <div class="toast-header">
+                        <img src="https://marten-gandolfo-laravel.vercel.app/logo" width="50" class="rounded me-2" alt="..."/>
+                        <strong class="me-auto">Muchas gracias por su compra!</strong>
+                        <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+                    </div>
+                    <div class="toast-body">
+                        Usted recibira un correo con informacion sobre su pedido en Master Gaming.
+                    </div>      
+                </div>
+            </div>
+
+            <div class="toast-container position-fixed bottom-0 end-0 p-3 data-bs-delay=10">
+                <div id="liveToastFailure" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+                    <div class="toast-header">
+                        <img src="https://marten-gandolfo-laravel.vercel.app/logo" width="50" class="rounded me-2" alt="..."/>
+                        <strong class="me-auto">Lo sentimos! Hubo un error en su compra.</strong>
+                        <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+                    </div>
+                    <div class="toast-body">
+                        Si el error periste comuniquese con el equipo de Master Gaming al correo mastergaming.sa@gmail.com.
+                    </div>      
+                </div>
+            </div>
+
         </div>
     );
 }
