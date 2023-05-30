@@ -1,11 +1,8 @@
 import React, { useEffect, useState, useRef } from 'react';
-import ProductsTable from './ProductsTable';
 import ProductsFilters from './ProductsFilters';
-import LoadingSpinner from '../../LoadingSpinner';
 import LoadingProducts from '../../LoadingProducts';
 import ErrorMessage from '../../ErrorMessage';
 import 'bootstrap/dist/css/bootstrap.css';
-import { Link } from 'react-router-dom';
 import '../../../App.css';
 import ProductCard from '../home/ProductCard';
 
@@ -76,7 +73,6 @@ export default function ProductsPage(){
             url = products.next_page_url;
         else
             url = products.prev_page_url;
-        console.log(url);
         if(url != null){
             setIsLoadingProducts(true);
             fetchProducts(url);
@@ -98,10 +94,6 @@ export default function ProductsPage(){
         fetchProducts(url);
       }, [searchTerm, selectedCategory, selectedOrder]);
 
-    if (isLoadingCategories) {
-        return <LoadingProducts />;
-    }
-
     if(errorMessage){
         return <ErrorMessage message={errorMessage} />;
     }
@@ -114,19 +106,16 @@ export default function ProductsPage(){
 
             {isLoadingProducts ? (
                 <LoadingProducts />
-             ) : (
-                <div class="card-container">
-                    {products.data.map((product) => (
-                        <ProductCard product={product}></ProductCard>
-                    ))}
-                </div>
-
-                
-                // products.data.length == 0 ? (
-                //     <div>No se encontraron productos</div>
-                // ) : (
-                //     <ProductsTable products={products} handlePageChange={handlePageChange} />
-                // )
+             ) : (                
+                products.data.length == 0 ? (
+                    <div>No se encontraron productos</div>
+                ) : (
+                    <div class="card-container">
+                        {products.data.map((product) => (
+                            <ProductCard product={product}></ProductCard>
+                        ))}
+                    </div>
+                )
             )}
 
             <nav aria-label="Page navigation example">
