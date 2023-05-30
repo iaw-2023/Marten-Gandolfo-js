@@ -1,7 +1,8 @@
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import '../App.css';
 
 export default function NavBar(){
+    const location = useLocation();
 
     return(
         <nav class="navbar navbar-expand-lg mb-1" style={{ backgroundColor: '#F0F0F0' }}>
@@ -16,10 +17,10 @@ export default function NavBar(){
                 </button>
                 <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
                     <div class="navbar-nav">
-                        <Link class="nav-link" style={{ fontSize: '20px' }} to="/">Inicio</Link>
-                        <Link class="nav-link" style={{ fontSize: '20px' }} to="/products">Productos</Link>
-                        <Link class="nav-link" style={{ fontSize: '20px' }} to="/cart">Carrito</Link>
-                        <Link class="nav-link" style={{ fontSize: '20px' }} to="/orders">Pedidos</Link>
+                        <Link class={`nav-link ${location.pathname === '/' ? 'active' : ''}`} style={{ fontSize: '20px' }} to="/">Inicio</Link>
+                        <Link class={`nav-link ${location.pathname.startsWith('/products') ? 'active' : ''}`} style={{ fontSize: '20px' }} to="/products">Productos</Link>
+                        <Link class={`nav-link ${location.pathname.startsWith('/cart') ? 'active' : ''}`} style={{ fontSize: '20px' }} to="/cart">Carrito</Link>
+                        <Link class={`nav-link ${location.pathname.startsWith('/orders') ? 'active' : ''}`} style={{ fontSize: '20px' }} to="/orders">Pedidos</Link>
                     </div>
                 </div>
             </div>
