@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import { useParams } from 'react-router-dom';
 import LoadingSpinner from '../../LoadingSpinner';
 import ErrorMessage from '../../ErrorMessage';
@@ -12,7 +13,6 @@ function ProductDetailsPage() {
   const cartItems = JSON.parse(localStorage.getItem('cart')) || [];
   const cartItem = cartItems.filter(item => item.id == id).pop();
   const [units, setUnits] = useState(cartItem ? cartItem.units : 1);
-  const [showAlert, setShowAlert] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
 
   useEffect(() => {
@@ -44,11 +44,6 @@ function ProductDetailsPage() {
     cart = cart.filter(item => item.id !== product.id);
     const updatedCart = units > 0 ? [...cart, cartItem] : cart;
     localStorage.setItem('cart', JSON.stringify(updatedCart));
-
-    setShowAlert(true);
-    setTimeout(() => {
-      setShowAlert(false);
-    }, 3000);
   };
 
   const handleToastShow = () => {
@@ -90,7 +85,7 @@ function ProductDetailsPage() {
                     </button>
                 </li>
                 <li class="page-item">
-                    <a class="page-link disabled"><span>{units}</span> unidades.</a>
+                    <div class="page-link disabled"><span>{units}</span> unidades.</div>
                 </li>
                 <li class="page-item">
                     <button class="page-link" onClick={() => handleUnitsChange(1)} aria-label="Next">
@@ -106,7 +101,7 @@ function ProductDetailsPage() {
           </button>
         </div>
         <div class="card-footer text-body-secondary">
-          <a href={product.product_official_site}>{product.product_official_site}</a>
+          <Link to={product.product_official_site}>{product.product_official_site}</Link>
         </div>
       </div>
 
@@ -120,7 +115,7 @@ function ProductDetailsPage() {
           <div class="toast-body">
             Usted agrego {product.name}.
             <div class="mt-2 pt-2 border-top">
-              <a type="button" href="https://mastergaming-iaw2023.vercel.app/cart" class="btn btn-primary btn-sm">Ver carrito</a>
+              <Link type="button" to="/cart" class="btn btn-primary btn-sm">Ver carrito</Link>
             </div>  
           </div>      
         </div>

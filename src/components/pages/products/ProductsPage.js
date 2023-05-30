@@ -128,7 +128,7 @@ export default function ProductsPage(){
                                     </button>
                                 </li>
                                 <li class="page-item">
-                                    <a class="page-link disabled">Página actual <span>{products.current_page}</span></a>
+                                    <div class="page-link disabled">Página actual <span>{products.current_page}</span></div>
                                 </li>
                                 <li class="page-item">
                                     <button class="page-link" onClick={() => handlePageChange(1)} aria-label="Next">
