@@ -1,16 +1,46 @@
 
 import ProductCard from './ProductCard';
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 
 export default function ProductsCarousel({products}){
+    const [slidesToShow, setSlidesToShow] = useState(5);
+  
+    useEffect(() => {
+      const handleResize = () => {
+        const windowWidth = window.innerWidth;
+        if (windowWidth <= 670) {
+          setSlidesToShow(1);
+        } else if (windowWidth <= 940) {
+          setSlidesToShow(2);
+        } else if (windowWidth <= 1250) {
+          setSlidesToShow(3);
+        } else if (windowWidth <= 1500){
+          setSlidesToShow(4);
+        } else{
+          setSlidesToShow(5);
+        }
+        console.log(windowWidth);
+      };
+  
+      handleResize(); // Call the function on initial render
+  
+      // Add event listener to handle window resize
+      window.addEventListener('resize', handleResize);
+  
+      // Clean up the event listener on component unmount
+      return () => {
+        window.removeEventListener('resize', handleResize);
+      };
+    }, []);
+
     const settings = {
       dots: false,
       infinite: true,
       speed: 500,
-      slidesToShow: 5,
+      slidesToShow: slidesToShow,
       slidesToScroll: 1,
       autoplay: true,
       autoplaySpeed: 2000,
