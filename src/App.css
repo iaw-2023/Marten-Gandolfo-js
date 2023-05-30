@@ -61,3 +61,11 @@
   margin-left: 30px;  /* Agrega un margen negativo a la izquierda */
   margin-right: 30px;  /* Agrega un margen negativo a la derecha */
 }
+
+.line-clamp-3 {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  -webkit-line-clamp: 3; /* Número de líneas máximas */
+}
