@@ -3,6 +3,8 @@ import { useParams } from 'react-router-dom';
 import LoadingSpinner from '../../LoadingSpinner';
 import Alert from '../../Alert';
 import ErrorMessage from '../../ErrorMessage';
+import 'bootstrap/dist/css/bootstrap.css';
+import { Toast } from 'bootstrap/dist/js/bootstrap.bundle';
 
 function ProductDetailsPage() {
   const { id } = useParams();
@@ -13,6 +15,7 @@ function ProductDetailsPage() {
   const [units, setUnits] = useState(cartItem ? cartItem.units : 1);
   const [showAlert, setShowAlert] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
+  const [showToast, setShowToast] = useState(false);
 
   useEffect(() => {
     fetch(`https://marten-gandolfo-laravel.vercel.app/_api/products/${id}`)
@@ -49,6 +52,17 @@ function ProductDetailsPage() {
       setShowAlert(false);
     }, 3000);
   };
+
+  const handleToastShow = () => {
+    const toastElement = document.getElementById('liveToast');
+    const toast = new Toast(toastElement);
+    toast.show();
+  };
+
+  const handleClick = () => {
+    addToCart();
+    handleToastShow();
+  }
 
   if (isLoading) {
     return <LoadingSpinner />;
@@ -87,34 +101,33 @@ function ProductDetailsPage() {
                 </li>
             </ul>
           </nav>
-          <button class="btn btn-primary" onClick={addToCart}>Agregar al carrito <svg xmlns="http://www.w3.org/2000/svg" width="20" fill="currentColor" class="bi bi-bag-plus" viewBox="0 0 16 16">
+          <button class="btn btn-primary" id="liveToastBtn" onClick={handleClick}>Agregar al carrito <svg xmlns="http://www.w3.org/2000/svg" width="20" fill="currentColor" class="bi bi-bag-plus" viewBox="0 0 16 16">
               <path fill-rule="evenodd" d="M8 7.5a.5.5 0 0 1 .5.5v1.5H10a.5.5 0 0 1 0 1H8.5V12a.5.5 0 0 1-1 0v-1.5H6a.5.5 0 0 1 0-1h1.5V8a.5.5 0 0 1 .5-.5z"/>
               <path d="M8 1a2.5 2.5 0 0 1 2.5 2.5V4h-5v-.5A2.5 2.5 0 0 1 8 1zm3.5 3v-.5a3.5 3.5 0 1 0-7 0V4H1v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V4h-3.5zM2 5h12v9a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V5z"/>
             </svg>
           </button>
-          <Alert message={"Producto agregado al carrito"} showAlert={showAlert}/>
         </div>
         <div class="card-footer text-body-secondary">
           <a href={product.product_official_site}>{product.product_official_site}</a>
         </div>
       </div>
 
-
-
-      {/* <h1>{product.name}</h1>
-      <img src={product.product_image} alt='' width="150"/>
-      <p>Precio: ${product.price}</p>
-      <p>Marca: {product.brand}</p>
-      <p>Descripción: {product.description}</p>
-      <p>Sitio oficial: <a href={product.product_official_site}>{product.product_official_site}</a></p>
-      <div>
-        <label>Unidades:</label>
-        <button onClick={() => handleUnitsChange(-1)}>-</button>
-        <span>{units}</span>
-        <button onClick={() => handleUnitsChange(1)}>+</button>
+      <div class="toast-container position-fixed bottom-0 end-0 p-3 data-bs-delay=10">
+        <div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+          <div class="toast-header">
+            <img src="https://marten-gandolfo-laravel.vercel.app/logo" width="50" class="rounded me-2" alt="..."/>
+            <strong class="me-auto">Producto agregado al carrito.</strong>
+            <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+          </div>
+          <div class="toast-body">
+            Usted agrego {product.name}.
+            <div class="mt-2 pt-2 border-top">
+              <a type="button" href="https://mastergaming-iaw2023.vercel.app/cart" class="btn btn-primary btn-sm">Ver carrito</a>
+            </div>  
+          </div>      
+        </div>
       </div>
-      <button onClick={addToCart}>Agregar al carrito</button>
-      <Alert message={"Producto agregado al carrito"} showAlert={showAlert}/> */}
+
     </div>
   );
 }
