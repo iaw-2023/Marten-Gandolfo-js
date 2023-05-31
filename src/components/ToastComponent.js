@@ -1,7 +1,7 @@
 import 'bootstrap/dist/css/bootstrap.css';
 import { Link } from 'react-router-dom';
 
-export default function CartTable({id, toastTitle, toastBody, addButton, buttonText, buttonLink}){
+export default function ToastComponent({id, toastTitle, toastBody, addButton, buttonText, buttonLink}){
     return (
         <div class="toast-container position-fixed bottom-0 end-0 p-3 data-bs-delay=10">
             <div id={id} class="toast" role="alert" aria-live="assertive" aria-atomic="true">
