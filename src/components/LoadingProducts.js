@@ -5,7 +5,7 @@ import ProductPlaceholder from './ProductPlaceholder';
 export default function LoadingSpinner(){
     return (
         <div class="card-container">
-            {[...Array(10)].map(() => (
+            {[...Array(12)].map(() => (
                 <ProductPlaceholder />
             ))}
         </div>
