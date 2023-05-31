@@ -67,6 +67,7 @@ export default function CartPage(){
         
             const shouldConfirm = window.confirm('¿Quieres confirmar la compra?');
             if (shouldConfirm) {
+                setIsLoading(true);
                 const response = await fetch('https://marten-gandolfo-laravel.vercel.app/_api/orders', {
                     method: 'POST',
                     headers: {
@@ -74,7 +75,7 @@ export default function CartPage(){
                     },
                     body: JSON.stringify(order)
                 });
-            
+                
                 if (response.ok) {
                     console.log('Orden realizada exitosamente');
                     handleToastSuccessShow();
@@ -84,10 +85,12 @@ export default function CartPage(){
                     console.error('Error al realizar la orden:', response.status);
                     handleToastFailureShow();
                 }
+                setIsLoading(false);
             }
         } catch (error) {
             console.error('Error al realizar la orden:', error);
             handleToastFailureShow();
+            setIsLoading(false);
         }
     };
     
