@@ -65,22 +65,25 @@ export default function CartPage(){
                 }))
             };
         
-            const response = await fetch('https://marten-gandolfo-laravel.vercel.app/_api/orders', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(order)
-            });
-        
-            if (response.ok) {
-                console.log('Orden realizada exitosamente');
-                handleToastSuccessShow();
-                localStorage.setItem('cart', JSON.stringify([]));
-                setCartItems([]);
-            } else {
-                console.error('Error al realizar la orden:', response.status);
-                handleToastFailureShow();
+            const shouldConfirm = window.confirm('¿Quieres confirmar la compra?');
+            if (shouldConfirm) {
+                const response = await fetch('https://marten-gandolfo-laravel.vercel.app/_api/orders', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(order)
+                });
+            
+                if (response.ok) {
+                    console.log('Orden realizada exitosamente');
+                    handleToastSuccessShow();
+                    localStorage.setItem('cart', JSON.stringify([]));
+                    setCartItems([]);
+                } else {
+                    console.error('Error al realizar la orden:', response.status);
+                    handleToastFailureShow();
+                }
             }
         } catch (error) {
             console.error('Error al realizar la orden:', error);
