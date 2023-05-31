@@ -13,7 +13,7 @@ export default function CartTable({id, toastTitle, toastBody, addButton, buttonT
                 <div class="toast-body">
                     {toastBody}
                     {addButton && (
-                        <div id="extraButton" class="mt-2 pt-2 border-top">
+                        <div id="extraButton" class="mt-2 pt-2">
                             <Link type="button" to={buttonLink} class="btn btn-primary btn-sm">{buttonText}</Link>
                         </div>
                     )}
