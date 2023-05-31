@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { useParams } from 'react-router-dom';
 import LoadingSpinner from '../../LoadingSpinner';
 import ErrorMessage from '../../ErrorMessage';
+import ToastComponent from '../../ToastComponent';
 import 'bootstrap/dist/css/bootstrap.css';
 import { Toast } from 'bootstrap/dist/js/bootstrap.bundle';
 
@@ -105,21 +106,7 @@ function ProductDetailsPage() {
         </div>
       </div>
 
-      <div class="toast-container position-fixed bottom-0 end-0 p-3 data-bs-delay=10">
-        <div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
-          <div class="toast-header">
-            <img src="https://marten-gandolfo-laravel.vercel.app/logo" width="50" class="rounded me-2" alt="..."/>
-            <strong class="me-auto">Producto agregado al carrito.</strong>
-            <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
-          </div>
-          <div class="toast-body">
-            Usted agrego {product.name}.
-            <div class="mt-2 pt-2 border-top">
-              <Link type="button" to="/cart" class="btn btn-primary btn-sm">Ver carrito</Link>
-            </div>  
-          </div>      
-        </div>
-      </div>
+      <ToastComponent id={'liveToast'} toastTitle={'Producto agregado al carrito.'} toastBody={'Usted agrego '+product.name+'.'} addButton={true} buttonText={'Ver carrito'} buttonLink={'/cart'}></ToastComponent>
 
     </div>
   );

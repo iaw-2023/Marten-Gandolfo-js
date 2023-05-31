@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import CartTable from './CartTable';
 import LoadingSpinner from '../../LoadingSpinner';
+import ToastComponent from '../../ToastComponent';
 import 'bootstrap/dist/css/bootstrap.css';
 import { Toast } from 'bootstrap/dist/js/bootstrap.bundle';
 import ErrorMessage from '../../ErrorMessage';
@@ -159,31 +160,9 @@ export default function CartPage(){
                     </>
             }
 
-            <div class="toast-container position-fixed bottom-0 end-0 p-3 data-bs-delay=10">
-                <div id="liveToastSuccess" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
-                    <div class="toast-header">
-                        <img src="https://marten-gandolfo-laravel.vercel.app/logo" width="50" class="rounded me-2" alt="..."/>
-                        <strong class="me-auto">Muchas gracias por su compra!</strong>
-                        <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
-                    </div>
-                    <div class="toast-body">
-                        Usted recibira un correo con informacion sobre su pedido en Master Gaming.
-                    </div>      
-                </div>
-            </div>
+            <ToastComponent id={'liveToastSuccess'} toastTitle={'Muchas gracias por su compra!'} toastBody={'Usted recibira un correo con informacion sobre su pedido en Master Gaming.'} addButton={false} buttonText={''} buttonLink={''}/>
 
-            <div class="toast-container position-fixed bottom-0 end-0 p-3 data-bs-delay=10">
-                <div id="liveToastFailure" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
-                    <div class="toast-header">
-                        <img src="https://marten-gandolfo-laravel.vercel.app/logo" width="50" class="rounded me-2" alt="..."/>
-                        <strong class="me-auto">Lo sentimos! Hubo un error en su compra.</strong>
-                        <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
-                    </div>
-                    <div class="toast-body">
-                        Si el error periste comuniquese con el equipo de Master Gaming al correo mastergaming.sa@gmail.com.
-                    </div>      
-                </div>
-            </div>
+            <ToastComponent id={'liveToastFailure'} toastTitle={'Lo sentimos! Hubo un error en su compra.'} toastBody={'Si el error periste comuniquese con el equipo de Master Gaming al correo mastergaming.sa@gmail.com.'} addButton={false} buttonText={''} buttonLink={''}/>
 
         </div>
     );
