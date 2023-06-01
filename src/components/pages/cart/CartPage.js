@@ -8,41 +8,48 @@ import { Toast } from 'bootstrap/dist/js/bootstrap.bundle';
 import ErrorMessage from '../../ErrorMessage';
 
 export default function CartPage(){
-    const [cartItems, setCartItems] = useState([]);
-    const [products, setProducts] = useState([]);
+    const [cartItems, setCartItems] = useState(JSON.parse(localStorage.getItem('cart')) || []);
+    const [products, setProducts] = useState(cartItems);
     const [isLoading, setIsLoading] = useState(true);
-    const [email, setEmail] = useState(''); // Nuevo estado para el campo de texto
-    const [isEmailValid, setIsEmailValid] = useState(false); // Estado para controlar la validez del campo de texto
-  
-    useEffect(() => {
-        const cartItems = JSON.parse(localStorage.getItem('cart')) || [];
-        setCartItems(cartItems);
+    const [email, setEmail] = useState('');
+    const [isEmailValid, setIsEmailValid] = useState(false);
+    const [errorMessage, setErrorMessage] = useState('');
+    const [deletedProducts, setDeletedProducts] = useState(0);
     
-        const fetchProductDetails = async () => {
-            const productIds = cartItems.map(item => item.id);
-            const productRequests = productIds.map(id =>
-              fetch(`https://marten-gandolfo-laravel.vercel.app/_api/products/${id}`)
-                .then(response => response.json())
-                .then(data => ({ ...data, units: cartItems.find(item => item.id === id).units }))
-            );
-      
-            const products = await Promise.all(productRequests);
-            const productsObject = products.reduce((obj, product) => {
-              obj[product.id] = product;
-              return obj;
-            }, {});
-            setProducts(productsObject);
-            setIsLoading(false);
-        };
-    
-        fetchProductDetails();
-      }, []);
-
     const handleRemoveItem = (itemId) => {
         const updatedCartItems = cartItems.filter(item => item.id !== itemId);
         setCartItems(updatedCartItems);
-        localStorage.setItem('cart', JSON.stringify(updatedCartItems));
     };
+        
+    const fetchProductDetails = async () => {
+        const productIds = cartItems.map(item => item.id);
+        const products = {};
+        const productRequests = productIds.map(id =>
+            fetch(`https://marten-gandolfo-laravel.vercel.app/_api/products/${id}`)
+              .then(response => {
+                if(!response.ok) throw new Error('Producto no encontrado');
+                return response.json();
+            })
+              .then(data => (products[id] = data))
+              .catch(error => {
+                handleRemoveItem(id);
+                setDeletedProducts(deletedProducts + 1);
+                setErrorMessage('Error al cargar alguno de los productos');
+            })
+          );
+
+        await Promise.all(productRequests);
+        setProducts(products);
+        setIsLoading(false);
+    };
+  
+    useEffect(() => {
+        fetchProductDetails();
+      }, []);
+
+    useEffect(() => {
+        localStorage.setItem('cart', JSON.stringify(cartItems));
+    }, [cartItems]);
 
     const handleToastSuccessShow = () => {
         const toastElement = document.getElementById('liveToastSuccess');
@@ -69,6 +76,7 @@ export default function CartPage(){
             const shouldConfirm = window.confirm('¿Quieres confirmar la compra?');
             if (shouldConfirm) {
                 setIsLoading(true);
+                setErrorMessage('');
                 const response = await fetch('https://marten-gandolfo-laravel.vercel.app/_api/orders', {
                     method: 'POST',
                     headers: {
@@ -80,11 +88,11 @@ export default function CartPage(){
                 if (response.ok) {
                     console.log('Orden realizada exitosamente');
                     handleToastSuccessShow();
-                    localStorage.setItem('cart', JSON.stringify([]));
                     setCartItems([]);
                 } else {
                     console.error('Error al realizar la orden:', response.status);
                     handleToastFailureShow();
+                    fetchProductDetails();
                 }
                 setIsLoading(false);
             }
@@ -106,7 +114,6 @@ export default function CartPage(){
           return item;
         });
         setCartItems(updatedCartItems);
-        localStorage.setItem('cart', JSON.stringify(updatedCartItems));
     };
 
     const handleEmailChange = event => {
@@ -118,10 +125,17 @@ export default function CartPage(){
         setIsEmailValid(emailRegex.test(email));
     }, [email]);
 
-    let errorMessage = '';
-    if(products.hasOwnProperty(undefined)){
-        localStorage.setItem('cart', JSON.stringify([]));
-        errorMessage = 'Error al cargar productos';
+    const handleDeletedProducts = () => {
+        const filteredItems = cartItems.filter(item => Object.keys(products).includes(item.id.toString()));
+        setCartItems(filteredItems);
+        setDeletedProducts(0);
+    }
+
+    console.log(products);
+    console.log(cartItems);
+    console.log(errorMessage);
+    if(deletedProducts > 0){
+        handleDeletedProducts();
     }
 
     return (
@@ -134,7 +148,7 @@ export default function CartPage(){
             {isLoading ? 
                 <LoadingSpinner />
             :
-                cartItems.length === 0 || errorMessage ?
+                cartItems.length === 0 ?
                     <>
                         <h3 class="text-center">Todavía no hay nada por acá</h3>
                         <div class="text-center">
