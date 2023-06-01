@@ -35,7 +35,6 @@ export default function ProductsPage(){
 
     useEffect(() => {
         fetch('https://marten-gandolfo-laravel.vercel.app/_api/categories')
-        //fetch('http://127.0.0.1:8000/_api/categories')
           .then(response => {
             if(!response.ok) throw new Error('Error al cargar las categorías');
             return response.json();
@@ -49,7 +48,6 @@ export default function ProductsPage(){
             setErrorMessage(error.message);
         });
         fetchProducts('https://marten-gandolfo-laravel.vercel.app/_api/products');
-        //fetchProducts('http://127.0.0.1:8000/_api/products');
       }, []);
 
     const handleSearch = () => {
@@ -81,15 +79,12 @@ export default function ProductsPage(){
 
     useEffect(() => {
         let url = 'https://marten-gandolfo-laravel.vercel.app/_api/products';
-        //let url = 'http://127.0.0.1:8000/_api/products';
         if(searchTerm != '')
             url += '/search/' + searchTerm;
         if(selectedCategory != -1)
             url += '/category/' + selectedCategory;
         if(selectedOrder != -1)
             url += '/order/' + selectedOrder;
-
-        console.log('URL:', url); // Log the URL
 
         fetchProducts(url);
       }, [searchTerm, selectedCategory, selectedOrder]);

@@ -86,11 +86,9 @@ export default function CartPage(){
                 });
                 
                 if (response.ok) {
-                    console.log('Orden realizada exitosamente');
                     handleToastSuccessShow();
                     setCartItems([]);
                 } else {
-                    console.error('Error al realizar la orden:', response.status);
                     handleToastFailureShow();
                     fetchProductDetails();
                 }
@@ -131,9 +129,6 @@ export default function CartPage(){
         setDeletedProducts(0);
     }
 
-    console.log(products);
-    console.log(cartItems);
-    console.log(errorMessage);
     if(deletedProducts > 0){
         handleDeletedProducts();
     }

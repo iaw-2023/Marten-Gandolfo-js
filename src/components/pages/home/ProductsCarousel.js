@@ -22,7 +22,6 @@ export default function ProductsCarousel({products}){
         } else{
           setSlidesToShow(5);
         }
-        console.log(windowWidth);
       };
   
       handleResize();
