@@ -9,47 +9,23 @@ import ErrorMessage from '../../ErrorMessage';
 
 export default function CartPage(){
     const [cartItems, setCartItems] = useState(JSON.parse(localStorage.getItem('cart')) || []);
-    const [products, setProducts] = useState(cartItems);
+    const [products, setProducts] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
     const [email, setEmail] = useState('');
     const [isEmailValid, setIsEmailValid] = useState(false);
     const [errorMessage, setErrorMessage] = useState('');
-    const [deletedProducts, setDeletedProducts] = useState(0);
     
     const handleRemoveItem = (itemId) => {
         const updatedCartItems = cartItems.filter(item => item.id !== itemId);
         setCartItems(updatedCartItems);
     };
-        
-    const fetchProductDetails = async () => {
-        const productIds = cartItems.map(item => item.id);
-        const products = {};
-        const productRequests = productIds.map(id =>
-            fetch(`https://marten-gandolfo-laravel.vercel.app/_api/products/${id}`)
-              .then(response => {
-                if(!response.ok) throw new Error('Producto no encontrado');
-                return response.json();
-            })
-              .then(data => (products[id] = data))
-              .catch(error => {
-                handleRemoveItem(id);
-                setDeletedProducts(deletedProducts + 1);
-                setErrorMessage('Error al cargar alguno de los productos');
-            })
-          );
 
-        await Promise.all(productRequests);
+    const handleDeletedProducts = () => {
+        const filteredItems = cartItems.filter(item => Object.keys(products).includes(item.id.toString()));
+        setCartItems(filteredItems);
+        products.deletedProducts = false;
         setProducts(products);
-        setIsLoading(false);
     };
-  
-    useEffect(() => {
-        fetchProductDetails();
-      }, []);
-
-    useEffect(() => {
-        localStorage.setItem('cart', JSON.stringify(cartItems));
-    }, [cartItems]);
 
     const handleToastSuccessShow = () => {
         const toastElement = document.getElementById('liveToastSuccess');
@@ -117,21 +93,46 @@ export default function CartPage(){
     const handleEmailChange = event => {
         setEmail(event.target.value);
       };
+        
+    const fetchProductDetails = async () => {
+        const productIds = cartItems.map(item => item.id);
+        const products = {};
+        const productRequests = productIds.map(id =>
+            fetch(`https://marten-gandolfo-laravel.vercel.app/_api/products/${id}`)
+              .then(response => {
+                if(!response.ok) throw new Error('Producto no encontrado');
+                return response.json();
+            })
+              .then(data => (products[id] = data))
+              .catch(error => {
+                handleRemoveItem(id);
+                products.deletedProducts = true;
+                setErrorMessage('Error al cargar alguno de los productos');
+            })
+          );
+
+        await Promise.all(productRequests);
+        setProducts(products);
+        setIsLoading(false);
+    };
+  
+    useEffect(() => {
+        fetchProductDetails();
+      }, []);
+
+    useEffect(() => {
+        localStorage.setItem('cart', JSON.stringify(cartItems));
+    }, [cartItems]);
     
     useEffect(() => {
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         setIsEmailValid(emailRegex.test(email));
     }, [email]);
 
-    const handleDeletedProducts = () => {
-        const filteredItems = cartItems.filter(item => Object.keys(products).includes(item.id.toString()));
-        setCartItems(filteredItems);
-        setDeletedProducts(0);
-    }
-
-    if(deletedProducts > 0){
-        handleDeletedProducts();
-    }
+    useEffect(() => {
+        if(products && products.deletedProducts)
+            handleDeletedProducts();
+    }, [products]);
 
     return (
         <div>
@@ -140,7 +141,7 @@ export default function CartPage(){
                 <h1>Carrito de compras</h1>
                 <img style={{padding: '20px'}} src="cart.png" width="200px" alt="..."/>
             </div>
-            {isLoading ? 
+            {isLoading || !products || products.deletedProducts ? 
                 <LoadingSpinner />
             :
                 cartItems.length === 0 ?
