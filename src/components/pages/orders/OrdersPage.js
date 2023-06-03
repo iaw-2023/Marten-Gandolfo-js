@@ -47,14 +47,10 @@ function OrdersPage() {
     const handleButtonClick = () => {
         navigate(`/orders/${tokenRef.current.value}/details`);
     };
-  
-    if (errorMessage) {
-      return <ErrorMessage message={errorMessage} />;
-    }
 
     return (
         <div>
-            <div class="card" style={{margin: '30px'}}>
+            <div class="card">
                 <div class="row align-items-center">
                     <div class="col-sm-4 text-center">
                         <h1>Pedidos</h1>
@@ -74,8 +70,9 @@ function OrdersPage() {
                     {showOrder &&
                     (isLoading ? 
                         <LoadingSpinner />
-                    : (
-                        <>
+                    : ( errorMessage ? 
+                            <ErrorMessage message={errorMessage} />
+                        :
                             <ul class="list-group list-group-flush">
                                 <li class="list-group-item">
                                     <h2>Detalles de su pedido</h2>
@@ -85,7 +82,6 @@ function OrdersPage() {
                                     <p class="card-text">Para consultar otro pedido ingrese un token nuevamente.</p>
                                 </li>
                             </ul>
-                        </>
                     ))}
             </div>
 
