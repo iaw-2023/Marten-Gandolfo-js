@@ -69,7 +69,7 @@ function ProductDetailsPage() {
   return (
     <div>
 
-      <div class="card text-center" style={{margin: '30px'}}>
+      <div class="card card-details text-center">
         <div class="card-header">
           {product.brand}
         </div>

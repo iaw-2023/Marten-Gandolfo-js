@@ -1,8 +1,8 @@
 export default function ProductPlaceholder(){
     return (
-        <div class="card" aria-hidden="true" style={{width: "18rem"}}>
-            <img class="card-img-top placeholder" style={{ height: "12rem", objectFit: "cover" }}></img>
-            <div class="card-body" style={{ height: "8rem" }}>
+        <div class="product-card" aria-hidden="true">
+            <img class="card-img-top placeholder"></img>
+            <div class="card-body">
                 <h5 class="card-title placeholder-glow">
                     <span class="placeholder col-6"></span>
                 </h5>

@@ -44,7 +44,7 @@ export default function ProductsCarousel({products}){
     };
 
     return (
-        <div className="m-5">
+        <div className="m-5 carousel">
             <Slider {...settings}>
                 {products.map((product) => (
                     <ProductCard key={product.id} product={product} />

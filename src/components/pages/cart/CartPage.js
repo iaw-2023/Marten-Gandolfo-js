@@ -139,7 +139,7 @@ export default function CartPage(){
             {errorMessage  && <ErrorMessage message={errorMessage} />}
             <div class="borderBottom text-center">
                 <h1>Carrito de compras</h1>
-                <img style={{padding: '20px'}} src="cart.png" width="200px" alt="..."/>
+                <img class='cart-image' src="cart.png" width="200px" alt="..."/>
             </div>
             {isLoading || !products || products.deletedProducts ? 
                 <LoadingSpinner />
@@ -156,7 +156,7 @@ export default function CartPage(){
                     <>
                         <CartTable cartItems={cartItems} products={products} handleUnitsChange={handleUnitsChange} handleRemoveItem={handleRemoveItem}/>
                         
-                        <div class="card" style={{margin: '30px'}}>
+                        <div class="card">
                             <h5 class="card-header">Confirmar compra</h5>
                             <div class="card-body">
                                 <h5 class="card-title">Ingrese su correo a continuacion</h5>
