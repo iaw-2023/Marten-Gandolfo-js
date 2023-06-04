@@ -35,8 +35,10 @@ function ProductDetailsPage() {
   }, [id]);
 
   const handleUnitsChange = (unitsChange) => {
-    const newUnits = Math.max(units + unitsChange, 0);
-    setUnits(newUnits);
+    if(units + unitsChange > 0){
+      const newUnits = Math.max(units + unitsChange, 0);
+      setUnits(newUnits);
+    }
   };
 
   const addToCart = () => {
