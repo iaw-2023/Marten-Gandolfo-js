@@ -48,10 +48,6 @@ export default function CartTable({cartItems, products, handleUnitsChange, handl
                                 </ul>
                             </nav>
 
-                            {/* <button onClick={() => handleUnitsChange(item.id, -1)}>-</button>
-                            {item.units}
-                            <button onClick={() => handleUnitsChange(item.id, 1)}>+</button> */}
-
                         </td>
                         <td>${(item.units * products[item.id].price).toFixed(2)}</td>
                         <td>
