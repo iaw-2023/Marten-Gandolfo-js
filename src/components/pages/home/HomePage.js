@@ -3,6 +3,7 @@ import LoadingSpinner from "../../LoadingSpinner";
 import ProductCard from "./ProductCard";
 import { useEffect, useState } from "react";
 import ProductsCarousel from "./ProductsCarousel";
+import GameSearch from "./gameSearch/GameSearch";
 
 export default function HomePage() {
   const [products, setProducts] = useState([]);
@@ -36,7 +37,10 @@ export default function HomePage() {
       ) : errorMessage ? (
         <ErrorMessage message={errorMessage} />
       ) : (
-        <ProductsCarousel products={products} />
+        <>
+          <GameSearch />
+          <ProductsCarousel products={products} />
+        </>
       )}
     </div>
   );

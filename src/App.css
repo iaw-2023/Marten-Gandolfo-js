@@ -85,6 +85,19 @@
   padding: 20px;
 }
 
+.games-list {
+  max-height: 300px;
+  overflow-y: auto;
+  padding: 0;
+}
+.game-item {
+  cursor: pointer;
+  list-style-type: none;
+}
+.game-item:hover {
+  background: #F0F0F0;
+}
+
 .filter-container {
   display: flex;
   flex-wrap: wrap;
