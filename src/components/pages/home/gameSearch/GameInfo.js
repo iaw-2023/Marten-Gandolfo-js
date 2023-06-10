@@ -19,14 +19,14 @@ export default function GameInfo({ gameInfo }){
     }
     
     return (
-        <div class='card'>
-            <img src={gameInfo.header_image} width={300}/>
-            <h3>{gameInfo.name}</h3>
-            <div>
-                <p>Requisitos Minimos:</p>
-                <RequirementsCard requirements={parseRequirements(gameInfo.pc_requirements.minimum)} />
-                <p>Requisitos Recomendados:</p>
-                <RequirementsCard requirements={parseRequirements(gameInfo.pc_requirements.recommended)} />
+        <div class='card gameinfo-card p-2 m-1'>
+            <div class='gameinfo-head'>
+                <img class='gameinfo-image m-2' src={gameInfo.header_image} width={'35%'}/>
+                <p class='gameinfo-title m-3' ><b>{gameInfo.name}</b></p>
+            </div>
+            <div class='card-container m-0'>
+                <RequirementsCard label={'Requisitos Minimos:'} requirements={parseRequirements(gameInfo.pc_requirements.minimum)} />
+                <RequirementsCard label={'Requisitos Recomendados:'} requirements={parseRequirements(gameInfo.pc_requirements.recommended)} />
             </div>
         </div>   
     );

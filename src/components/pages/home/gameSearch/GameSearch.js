@@ -121,12 +121,12 @@ export default function GameSearch(){
     if(gameInfo) console.log(gameInfo.pc_requirements);
 
     return (
-        <div class='card'>
+        <div class='card p-2'>
             {errorMessage ?
                     <ErrorMessage message={errorMessage} />
                 :                
                     <>
-                        <h2>Buscador de juegos</h2>
+                        <h2 class='m-1' >Buscador de juegos</h2>
                         <GameSearchBar handleClearSearch={handleClearSearch} searchTerm={searchTerm} handleSearchTermChange={handleSearchTermChange} handleSearch={handleSearch} />
                         {isLoadingAllGames || isLoadingFeaturedGames || isLoadingSpecificGames || isLoadingGameInfo ?
                             <LoadingSpinner />

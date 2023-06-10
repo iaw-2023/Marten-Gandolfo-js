@@ -97,6 +97,16 @@
 .game-item:hover {
   background: #F0F0F0;
 }
+.gameinfo-head {
+  display: flex;
+  align-items: center;
+}
+.gameinfo-title {
+  font-size: 4em;
+}
+.card .requirements-card {
+  width: 49%;
+}
 
 .filter-container {
   display: flex;
