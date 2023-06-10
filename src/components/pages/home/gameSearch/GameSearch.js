@@ -20,27 +20,32 @@ export default function GameSearch(){
 
     const filterAllGames = (games) => {
         const forbiddenWords = ['dlc', 'soundtrack', 'pack', 'entitlements', 'costume', 'suit', 'challenge', 'kit', 'content', 'key', 'character', 'demo', 'tool', 'expansion', 'addon', 'trial', 'beta', 'test', 'mod', 'video', 'movie', 'film', 'sdk', 'guide','walkthrough', 'trailer', 'upgrade', 'intro', 'season'];
-        return games.filter(game => game.name != '' && !forbiddenWords.some(substring => game.name.toLowerCase().includes(substring)))
+        return games.filter(game => game.name != '' && !forbiddenWords.some(substring => game.name.toLowerCase().includes(substring)));
     };
 
     const fetchAllGames = () => {
-        fetch('https://master-gaming-437sja041-marten-gandolfo.vercel.app/_api/steam/games')
+        const fetchGamePage = (url) => {
+          return fetch(url)
             .then(response => {
-                if(!response.ok) throw new Error('Error al cargar juegos');
-                return response.json();
-            })
-            .then(data => {
-                setAllGames(filterAllGames(data.applist.apps));
-                setIsLoadingAllGames(false);
-            })
-            .catch(error => {
-                setErrorMessage(error.message)
-                setIsLoadingAllGames(false);
+              if (!response.ok) throw new Error('Error al cargar juegos');
+              return response.json();
             });
-    }
+        };
+      
+        Promise.all([fetchGamePage('https://master-gaming-fj6w1e4ft-marten-gandolfo.vercel.app/_api/steam/games/page/0'), fetchGamePage('https://master-gaming-fj6w1e4ft-marten-gandolfo.vercel.app/_api/steam/games/page/1')])
+          .then(([data1, data2]) => {
+            const combinedData = [...data1, ...data2];
+            setAllGames(filterAllGames(combinedData));
+            setIsLoadingAllGames(false);
+          })
+          .catch(error => {
+            setErrorMessage(error.message)
+            setIsLoadingAllGames(false);
+          });
+      };
 
     const fetchFeaturedGames = () => {
-        fetch('https://master-gaming-437sja041-marten-gandolfo.vercel.app/_api/steam/games/featured')
+        fetch('https://master-gaming-fj6w1e4ft-marten-gandolfo.vercel.app/_api/steam/games/featured')
             .then(response => {
                 if(!response.ok) throw new Error('Error al cargar juegos');
                 return response.json();
@@ -66,7 +71,7 @@ export default function GameSearch(){
     };
 
     const handleSearch = () => {
-        if(searchTerm){
+        if(searchTerm && !isLoadingAllGames){
             setGameInfo(null);
             setIsLoadingSpecificGames(true);
             const filteredGames = allGames.filter(game =>
@@ -93,7 +98,7 @@ export default function GameSearch(){
 
     const fetchGameInfo = (id) => {
         setIsLoadingGameInfo(true);
-        fetch('https://master-gaming-437sja041-marten-gandolfo.vercel.app/_api/steam/games/' + id)
+        fetch('https://master-gaming-fj6w1e4ft-marten-gandolfo.vercel.app/_api/steam/games/' + id)
             .then(response => {
                 if(!response.ok) throw new Error('Error al cargar juegos');
                 console.log(response);
