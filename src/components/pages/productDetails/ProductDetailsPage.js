@@ -76,7 +76,7 @@ function ProductDetailsPage() {
           {product.brand}
         </div>
         <div class="card-body">
-          <img src={product.product_image} alt='' width="250"/>
+          <img src={`data:image/webp;base64,${product.product_image}`} alt='' width="250"/>
           <h5 class="card-title">{product.name}</h5>
           <p class="card-text">${product.price} x unidad</p>
           <p class="card-text">{product.description}</p>

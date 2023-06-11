@@ -23,7 +23,7 @@ export default function CartTable({cartItems, products, handleUnitsChange, handl
                     products[item.id] &&
                     <tr key={item.id}>
                         <td>
-                            <Link to={'/products/' + item.id}><img src={products[item.id].product_image} alt='' width="150" /></Link>
+                            <Link to={'/products/' + item.id}><img src={`data:image/webp;base64,${products[item.id].product_image}`} alt='' width="150" /></Link>
                         </td>
                         <td>
                             <Link to={'/products/' + item.id}>{products[item.id].name}</Link>
