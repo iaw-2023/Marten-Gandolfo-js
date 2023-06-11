@@ -11,7 +11,7 @@ export default function GamesList({ specificGames, fetchGameInfo }){
     }
 
     return (
-        <ul class='games-list p-2 m-0'>
+        <ul class='games-list p-2 m-1 card'>
             {removeDuplicates(specificGames).map(game => <li class='game-item' key={game.appid || game.id} onClick={() => fetchGameInfo(game.appid || game.id)}>{game.name}</li>)}
         </ul>
     );

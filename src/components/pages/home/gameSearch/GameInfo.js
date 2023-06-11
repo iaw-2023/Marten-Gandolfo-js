@@ -22,7 +22,7 @@ export default function GameInfo({ gameInfo }){
         <div class='card gameinfo-card p-2 m-1'>
             <div class='gameinfo-head'>
                 <img class='gameinfo-image m-2' src={gameInfo.header_image} width={'35%'}/>
-                <p class='gameinfo-title m-3' ><b>{gameInfo.name}</b></p>
+                <h5 class='gameinfo-title m-3 line-clamp-3' ><b>{gameInfo.name}</b></h5>
             </div>
             <div class='card-container m-0'>
                 <RequirementsCard label={'Requisitos Minimos:'} requirements={parseRequirements(gameInfo.pc_requirements.minimum)} />
