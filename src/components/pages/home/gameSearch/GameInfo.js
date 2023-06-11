@@ -25,8 +25,8 @@ export default function GameInfo({ gameInfo }){
                 <h5 class='gameinfo-title m-3 line-clamp-3' ><b>{gameInfo.name}</b></h5>
             </div>
             <div class='card-container m-0'>
-                <RequirementsCard label={'Requisitos Minimos:'} requirements={parseRequirements(gameInfo.pc_requirements.minimum)} />
-                <RequirementsCard label={'Requisitos Recomendados:'} requirements={parseRequirements(gameInfo.pc_requirements.recommended)} />
+                <RequirementsCard label={'Requisitos Minimos:'} requirements={parseRequirements(gameInfo.pc_requirements.minimum)} requirementsText={gameInfo.pc_requirements.minimum} />
+                <RequirementsCard label={'Requisitos Recomendados:'} requirements={parseRequirements(gameInfo.pc_requirements.recommended)} requirementsText={gameInfo.pc_requirements.recommended} />
             </div>
         </div>   
     );
