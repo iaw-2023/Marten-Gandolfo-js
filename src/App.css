@@ -102,10 +102,10 @@
   align-items: center;
 }
 .gameinfo-title {
-  font-size: 4em;
+  font-size: 5vw;
 }
 .card .requirements-card {
-  width: 49%;
+  width: 40vw;
 }
 
 .filter-container {
