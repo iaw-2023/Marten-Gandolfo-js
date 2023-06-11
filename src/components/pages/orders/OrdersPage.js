@@ -21,7 +21,7 @@ function OrdersPage() {
         if(token){
             setShowOrder(true);
             setIsLoading(true);
-            fetch(`https://marten-gandolfo-laravel.vercel.app/_api/orders/${token}`)
+            fetch(`https://marten-gandolfo-laravel-promocion.vercel.app/_api/orders/${token}`)
                 .then(response => {
                     if(response.status === 400) throw new Error('Código inválido');
                     if(response.status === 404) throw new Error('Pedido no encontrado');

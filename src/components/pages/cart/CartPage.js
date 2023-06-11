@@ -53,7 +53,7 @@ export default function CartPage(){
             if (shouldConfirm) {
                 setIsLoading(true);
                 setErrorMessage('');
-                const response = await fetch('https://marten-gandolfo-laravel.vercel.app/_api/orders', {
+                const response = await fetch('https://marten-gandolfo-laravel-promocion.vercel.app/_api/orders', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
@@ -98,7 +98,7 @@ export default function CartPage(){
         const productIds = cartItems.map(item => item.id);
         const products = {};
         const productRequests = productIds.map(id =>
-            fetch(`https://marten-gandolfo-laravel.vercel.app/_api/products/${id}`)
+            fetch(`https://marten-gandolfo-laravel-promocion.vercel.app/_api/products/${id}`)
               .then(response => {
                 if(!response.ok) throw new Error('Producto no encontrado');
                 return response.json();

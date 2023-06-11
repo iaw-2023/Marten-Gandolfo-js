@@ -6,7 +6,7 @@ export default function ToastComponent({id, toastTitle, toastBody, addButton, bu
         <div class="toast-container position-fixed bottom-0 end-0 p-3 data-bs-delay=10">
             <div id={id} class="toast" role="alert" aria-live="assertive" aria-atomic="true">
                 <div class="toast-header">
-                    <img src="https://marten-gandolfo-laravel.vercel.app/logo" width="50" class="rounded me-2" alt="..."/>
+                    <img src="https://marten-gandolfo-laravel-promocion.vercel.app/logo" width="50" class="rounded me-2" alt="..."/>
                     <strong class="me-auto">{toastTitle}</strong>
                     <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
                 </div>

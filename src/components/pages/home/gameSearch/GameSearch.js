@@ -32,7 +32,7 @@ export default function GameSearch(){
             });
         };
       
-        Promise.all([fetchGamePage('https://master-gaming-fj6w1e4ft-marten-gandolfo.vercel.app/_api/steam/games/page/0'), fetchGamePage('https://master-gaming-fj6w1e4ft-marten-gandolfo.vercel.app/_api/steam/games/page/1')])
+        Promise.all([fetchGamePage('https://marten-gandolfo-laravel-promocion.vercel.app/_api/steam/games/page/0'), fetchGamePage('https://marten-gandolfo-laravel-promocion.vercel.app/_api/steam/games/page/1')])
           .then(([data1, data2]) => {
             const combinedData = [...data1, ...data2];
             setAllGames(filterAllGames(combinedData));
@@ -45,7 +45,7 @@ export default function GameSearch(){
       };
 
     const fetchFeaturedGames = () => {
-        fetch('https://master-gaming-fj6w1e4ft-marten-gandolfo.vercel.app/_api/steam/games/featured')
+        fetch('https://marten-gandolfo-laravel-promocion.vercel.app/_api/steam/games/featured')
             .then(response => {
                 if(!response.ok) throw new Error('Error al cargar juegos');
                 return response.json();
@@ -98,7 +98,7 @@ export default function GameSearch(){
 
     const fetchGameInfo = (id) => {
         setIsLoadingGameInfo(true);
-        fetch('https://master-gaming-fj6w1e4ft-marten-gandolfo.vercel.app/_api/steam/games/' + id)
+        fetch('https://marten-gandolfo-laravel-promocion.vercel.app/_api/steam/games/' + id)
             .then(response => {
                 if(!response.ok) throw new Error('Error al cargar juegos');
                 console.log(response);

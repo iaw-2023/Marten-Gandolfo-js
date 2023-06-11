@@ -9,7 +9,7 @@ export default function NavBar(){
             <div class="container-fluid">
                 <Link class="navbar-brand" to="/">
                     <div class="block">
-                        <img src="https://marten-gandolfo-laravel.vercel.app/logo_name" width="250" alt="logo"></img>
+                        <img src="https://marten-gandolfo-laravel-promocion.vercel.app/logo_name" width="250" alt="logo"></img>
                     </div>
                 </Link>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
