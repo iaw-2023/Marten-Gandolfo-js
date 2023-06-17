@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { Link } from 'react-router-dom';
 import CartTable from './CartTable';
 import LoadingSpinner from '../../LoadingSpinner';
@@ -6,14 +6,15 @@ import ToastComponent from '../../ToastComponent';
 import 'bootstrap/dist/css/bootstrap.css';
 import { Toast } from 'bootstrap/dist/js/bootstrap.bundle';
 import ErrorMessage from '../../ErrorMessage';
+import Login from '../account/Login';
+import { AuthContext } from '../account/AuthProvider';
 
 export default function CartPage(){
     const [cartItems, setCartItems] = useState(JSON.parse(localStorage.getItem('cart')) || []);
     const [products, setProducts] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
-    const [email, setEmail] = useState('');
-    const [isEmailValid, setIsEmailValid] = useState(false);
     const [errorMessage, setErrorMessage] = useState('');
+    const { isAuthenticated } = useContext(AuthContext);
     
     const handleRemoveItem = (itemId) => {
         const updatedCartItems = cartItems.filter(item => item.id !== itemId);
@@ -42,7 +43,6 @@ export default function CartPage(){
     const buyItems = async () => {
         try {
             const order = {
-                email: email,
                 products: cartItems.map(item => ({
                     id: item.id,
                     units: item.units
@@ -53,8 +53,9 @@ export default function CartPage(){
             if (shouldConfirm) {
                 setIsLoading(true);
                 setErrorMessage('');
-                const response = await fetch('https://marten-gandolfo-laravel-promocion.vercel.app/_api/orders', {
+                const response = await fetch(process.env.REACT_APP_API_URL + '_api/orders', {
                     method: 'POST',
+                    credentials: 'include',
                     headers: {
                         'Content-Type': 'application/json'
                     },
@@ -89,16 +90,12 @@ export default function CartPage(){
         });
         setCartItems(updatedCartItems);
     };
-
-    const handleEmailChange = event => {
-        setEmail(event.target.value);
-      };
         
     const fetchProductDetails = async () => {
         const productIds = cartItems.map(item => item.id);
         const products = {};
         const productRequests = productIds.map(id =>
-            fetch(`https://marten-gandolfo-laravel-promocion.vercel.app/_api/products/${id}`)
+            fetch(process.env.REACT_APP_API_URL + `_api/products/${id}`)
               .then(response => {
                 if(!response.ok) throw new Error('Producto no encontrado');
                 return response.json();
@@ -123,11 +120,6 @@ export default function CartPage(){
     useEffect(() => {
         localStorage.setItem('cart', JSON.stringify(cartItems));
     }, [cartItems]);
-    
-    useEffect(() => {
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        setIsEmailValid(emailRegex.test(email));
-    }, [email]);
 
     useEffect(() => {
         if(products && products.deletedProducts)
@@ -155,18 +147,23 @@ export default function CartPage(){
                 :
                     <>
                         <CartTable cartItems={cartItems} products={products} handleUnitsChange={handleUnitsChange} handleRemoveItem={handleRemoveItem}/>
-                        
-                        <div class="card">
-                            <h5 class="card-header">Confirmar compra</h5>
-                            <div class="card-body">
-                                <h5 class="card-title">Ingrese su correo a continuacion</h5>
-                                <div class="input-group mb-3">
-                                    <input type="text" value={email} onChange={handleEmailChange} class="form-control" placeholder="Ingrese aquí su correo"/>
-                                    <button onClick={buyItems} disabled={!isEmailValid} class="btn btn-primary">Comprar</button>
+                        {isAuthenticated ? 
+                            <div class="card">
+                                <h5 class="card-header">Confirmar compra</h5>
+                                <div class="card-body">
+                                    <p class="card-text">Al realizar esta compra usted confirma que ha leido los terminos y condiciones.</p>
+                                    <button onClick={buyItems} class="btn btn-primary">Comprar</button>
                                 </div>
-                                <p class="card-text">Al realizar esta compra usted confirma que ha leido los terminos y condiciones.</p>
                             </div>
-                        </div>
+                        
+                        :
+                            <div>
+                                <h3 class="m-4">Inicie sesión para comprar</h3>
+                                <Login />
+                            </div>
+                        }
+
+                        
                     </>
             }
 

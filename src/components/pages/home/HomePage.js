@@ -11,7 +11,7 @@ export default function HomePage() {
   const [errorMessage, setErrorMessage] = useState('');
 
   useEffect(() => {
-    fetch('https://marten-gandolfo-laravel-promocion.vercel.app/_api/products/random/10')
+    fetch(process.env.REACT_APP_API_URL + '_api/products/random/10')
       .then(response => {
         if(!response.ok) throw new Error('Error al cargar los productos');
         return response.json();

@@ -17,7 +17,7 @@ function ProductDetailsPage() {
   const [errorMessage, setErrorMessage] = useState('');
 
   useEffect(() => {
-    fetch(`https://marten-gandolfo-laravel-promocion.vercel.app/_api/products/${id}`)
+    fetch(process.env.REACT_APP_API_URL + `_api/products/${id}`)
       .then(response => {
         if(response.status === 400) throw new Error('Código de producto inválido');
         if(response.status === 404) throw new Error('Producto no encontrado');

@@ -21,6 +21,7 @@ export default function NavBar(){
                         <Link class={`nav-link ${location.pathname.startsWith('/products') ? 'active' : ''}`} to="/products">Productos</Link>
                         <Link class={`nav-link ${location.pathname.startsWith('/cart') ? 'active' : ''}`} to="/cart">Carrito</Link>
                         <Link class={`nav-link ${location.pathname.startsWith('/orders') ? 'active' : ''}`} to="/orders">Pedidos</Link>
+                        <Link class={`nav-link ${location.pathname.startsWith('/account') ? 'active' : ''}`} to="/account">Tu cuenta</Link>
                     </div>
                 </div>
             </div>

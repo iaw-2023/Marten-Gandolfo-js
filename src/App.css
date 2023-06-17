@@ -123,3 +123,17 @@
   text-overflow: ellipsis;
   -webkit-line-clamp: 3;
 }
+
+.loginAndRegisterContainer {
+  display: flex;
+}
+
+.loginPage,
+.registerPage {
+  flex: 1;
+  margin-right: 10px;
+}
+
+.order-tr {
+  cursor: pointer;
+}

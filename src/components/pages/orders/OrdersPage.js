@@ -1,27 +1,54 @@
-import React, { useEffect, useState, useRef } from 'react';
-import { useNavigate } from "react-router-dom";
+import React, { useEffect, useState, useContext } from 'react';
 import { useParams } from 'react-router-dom';
+import OrdersTable from './OrdersTable';
 import OrderDetailsTable from './OrderDetailsTable';
 import LoadingSpinner from '../../LoadingSpinner';
 import ErrorMessage from '../../ErrorMessage';
 import 'bootstrap/dist/css/bootstrap.css';
+import { AuthContext } from '../account/AuthProvider';
+import Login from '../account/Login';
 
 function OrdersPage() {
-    const {token} = useParams();
-    const [showOrder, setShowOrder] = useState(false);
-    const [isTokenValid, setIsTokenValid] = useState(false);
-    const [order, setOrder] = useState(null);
-    const [isLoading, setIsLoading] = useState(false);
+    const [orders, setOrders] = useState([]);
+    const [isLoading, setIsLoading] = useState(true);
     const [errorMessage, setErrorMessage] = useState('');
-    const tokenRef = useRef(null);
-    const navigate = useNavigate();
+    const { isAuthenticated } = useContext(AuthContext);
+
+    const fetchOrders = () => {
+        if(isAuthenticated)
+            fetch(process.env.REACT_APP_API_URL + '_api/orders', {
+                method: 'GET',
+                credentials: 'include'
+            })
+                .then(response => {
+                    //TODO ver si no esta autenticado
+                    if(!response.ok) throw new Error('Error al cargar los pedidos');
+                    return response.json();
+                })
+                .then(data => {
+                    setOrders(data.orders);
+                    setIsLoading(false);
+                })
+                .catch(error => {
+                    setIsLoading(false);
+                    setErrorMessage(error.message);
+                });
+    };
 
     useEffect(() => {
+        fetchOrders();
+    }, []);
+
+    useEffect(() => {
+        fetchOrders();
+    }, [isAuthenticated])
+
+    /* useEffect(() => {
         tokenRef.current.value = token ?? '';
         if(token){
             setShowOrder(true);
             setIsLoading(true);
-            fetch(`https://marten-gandolfo-laravel-promocion.vercel.app/_api/orders/${token}`)
+            fetch(process.env.REACT_APP_API_URL + `_api/orders/${token}`)
                 .then(response => {
                     if(response.status === 400) throw new Error('Código inválido');
                     if(response.status === 404) throw new Error('Pedido no encontrado');
@@ -46,11 +73,28 @@ function OrdersPage() {
 
     const handleButtonClick = () => {
         navigate(`/orders/${tokenRef.current.value}/details`);
-    };
+    }; */
 
     return (
-        <div>
-            <div class="card">
+        <div class="borderBottom text-center">
+            <h1>Pedidos</h1>
+            <img src="/shopping_bag.png" width="200px" alt="..."/>
+            {isAuthenticated ? (
+                isLoading ? 
+                    <LoadingSpinner />
+                :
+                    errorMessage ?
+                        <ErrorMessage errorMessage={errorMessage} />
+                    :
+                        <OrdersTable orders={orders} />
+                )
+            :
+                <div>
+                    <h3 class="m-4">Inicie sesión para ver sus pedidos</h3>
+                    <Login />
+                </div>
+            }
+            {/* <div class="card">
                 <div class="row align-items-center">
                     <div class="col-sm-4 text-center">
                         <h1>Pedidos</h1>
@@ -84,7 +128,7 @@ function OrdersPage() {
                             </ul>
                     ))}
             </div>
-
+ */}
             
         </div>
     );
