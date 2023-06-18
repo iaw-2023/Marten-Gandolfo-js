@@ -57,6 +57,7 @@ export default function CartPage(){
                     method: 'POST',
                     credentials: 'include',
                     headers: {
+                        'Authorization': 'Bearer ' + localStorage.getItem('token'),
                         'Content-Type': 'application/json'
                     },
                     body: JSON.stringify(order)

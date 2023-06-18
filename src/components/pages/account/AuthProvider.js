@@ -9,7 +9,6 @@ export const AuthProvider = ({ children }) => {
 
     const login = async (credentials) => {
         try{
-            //console.log(JSON.stringify(credentials));
             const response = await fetch(process.env.REACT_APP_API_URL + '_api/login', {
                 method: 'POST',
                 credentials: 'include',
@@ -20,6 +19,8 @@ export const AuthProvider = ({ children }) => {
             });
 
             if (response.ok) {
+                const data = await response.json();
+                localStorage.setItem('token', data.token);
                 setIsAuthenticated(true);
             } else {
                 window.alert('Credenciales invalidas.');

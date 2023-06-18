@@ -18,7 +18,10 @@ function OrdersPage() {
         if(isAuthenticated)
             fetch(process.env.REACT_APP_API_URL + '_api/orders', {
                 method: 'GET',
-                credentials: 'include'
+                credentials: 'include',
+                headers: {
+                    'Authorization': 'Bearer ' + localStorage.getItem('token'),
+                }
             })
                 .then(response => {
                     //TODO ver si no esta autenticado
