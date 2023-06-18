@@ -55,7 +55,6 @@ export default function CartPage(){
                 setErrorMessage('');
                 const response = await fetch(process.env.REACT_APP_API_URL + '_api/orders', {
                     method: 'POST',
-                    credentials: 'include',
                     headers: {
                         'Authorization': 'Bearer ' + localStorage.getItem('token'),
                         'Content-Type': 'application/json'

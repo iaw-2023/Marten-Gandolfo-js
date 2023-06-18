@@ -18,7 +18,6 @@ export default function OrderDetailsPage(){
         if(isAuthenticated)
             fetch(process.env.REACT_APP_API_URL + '_api/orders/' + id, {
                 method: 'GET',
-                credentials: 'include',
                 headers: {
                     'Authorization': 'Bearer ' + localStorage.getItem('token'),
                 }

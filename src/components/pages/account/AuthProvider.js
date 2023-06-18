@@ -11,7 +11,6 @@ export const AuthProvider = ({ children }) => {
         try{
             const response = await fetch(process.env.REACT_APP_API_URL + '_api/login', {
                 method: 'POST',
-                credentials: 'include',
                 headers: {
                     'Content-Type': 'application/json',
                 },
@@ -34,9 +33,24 @@ export const AuthProvider = ({ children }) => {
         // Lógica para iniciar sesión (llamada a la API, etc.)
     };
 
-    const logout = () => {
+    const logout = async () => {
         // Lógica para cerrar sesión (llamada a la API, etc.)
-        setIsAuthenticated(false);
+        try{
+            await fetch(process.env.REACT_APP_API_URL + '_api/logout', {
+                method: 'GET',
+                headers: {
+                    'Authorization': 'Bearer ' + localStorage.getItem('token'),
+                    'Content-Type': 'application/json',
+                }
+            });
+
+            localStorage.setItem('token', '');
+            setIsAuthenticated(false);
+
+        } catch (error) {
+            console.log(error);
+            window.alert('Error al cerrar sesion.');
+        }
     };
 
     return (
