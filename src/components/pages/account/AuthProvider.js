@@ -1,11 +1,11 @@
+import { useNavigate } from "react-router-dom";
 import React, { useEffect, useState, createContext } from 'react';
 
 export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
     const [isAuthenticated, setIsAuthenticated] = useState(localStorage.getItem('token'));
-
-
+    const navigate = useNavigate();
 
     const login = async (credentials) => {
         try{
@@ -77,8 +77,56 @@ export const AuthProvider = ({ children }) => {
         }
     }
 
+    const requestPasswordReset = async (email) => {
+        try{
+            const response = await fetch(process.env.REACT_APP_API_URL + '_api/requestpassword', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({email: email}),
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                window.alert('Se enviará un correo a su email para recuperar su contraseña.');
+            } else {
+                window.alert('Error al solicitar recuperación de contraseña.');
+            }
+
+        } catch (error) {
+            window.alert('Error al solicitar recuperación de contraseña.');
+        }
+    }
+
+    const resetPassword = async (credentials) => {
+        try{
+            const response = await fetch(process.env.REACT_APP_API_URL + '_api/resetpassword', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(credentials),
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                localStorage.setItem('token', data.token);
+                setIsAuthenticated(true);
+                navigate('/');
+                window.alert('Contraseña reestablecida.');
+            } else {
+                window.alert('Error al recuperar contraseña.');
+            }
+
+        } catch (error) {
+            console.log(error);
+            window.alert('Error al recuperar contraseña.');
+        }
+    }
+
     return (
-        <AuthContext.Provider value={{ isAuthenticated, setIsAuthenticated, login, logout, register }}>
+        <AuthContext.Provider value={{ isAuthenticated, setIsAuthenticated, login, logout, register, requestPasswordReset, resetPassword }}>
             {children}
         </AuthContext.Provider>
     );

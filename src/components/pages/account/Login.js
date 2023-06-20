@@ -2,6 +2,7 @@ import 'bootstrap/dist/css/bootstrap.css';
 import '../../../App.css';
 import { AuthContext } from './AuthProvider';
 import React, { useContext, useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 
 export default function Login(){
     const [email, setEmail] = useState('');
@@ -24,7 +25,7 @@ export default function Login(){
     }, [email]);
 
     useEffect(() => {
-        setIsPasswordValid(password.length > 0);
+        setIsPasswordValid(password.length > 3);
     }, [password]);
 
     return (
@@ -36,6 +37,8 @@ export default function Login(){
                         <input type="text" class="form-control mb-3" name="username" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Ingrese aquí su correo"></input>
                         <input type="password" class="form-control mb-3" name="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Ingrese aquí su contraseña"/>
                         <button class="btn btn-primary" disabled={!isEmailValid || !isPasswordValid} type="submit" onClick={handleLogin}>Login</button>
+                        <br />
+                        <Link to={'/forgotpassword'}>¿Olvido su contraseña?</Link>
                     </div>
                 </div>
             </div>
