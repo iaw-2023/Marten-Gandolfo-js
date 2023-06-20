@@ -24,7 +24,7 @@ export default function Login(){
     }, [email]);
 
     useEffect(() => {
-        setIsPasswordValid(password);
+        setIsPasswordValid(password.length > 0);
     }, [password]);
 
     return (

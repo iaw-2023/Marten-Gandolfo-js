@@ -8,6 +8,7 @@ import { Toast } from 'bootstrap/dist/js/bootstrap.bundle';
 import ErrorMessage from '../../ErrorMessage';
 import Login from '../account/Login';
 import { AuthContext } from '../account/AuthProvider';
+import Register from '../account/Register';
 
 export default function CartPage(){
     const [cartItems, setCartItems] = useState(JSON.parse(localStorage.getItem('cart')) || []);
@@ -160,6 +161,7 @@ export default function CartPage(){
                             <div>
                                 <h3 class="m-4">Inicie sesión para comprar</h3>
                                 <Login />
+                                <Register />
                             </div>
                         }
 

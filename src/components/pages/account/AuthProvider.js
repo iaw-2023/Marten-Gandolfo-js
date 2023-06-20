@@ -3,7 +3,7 @@ import React, { useEffect, useState, createContext } from 'react';
 export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-    const [isAuthenticated, setIsAuthenticated] = useState(false);
+    const [isAuthenticated, setIsAuthenticated] = useState(localStorage.getItem('token'));
 
 
 
@@ -53,8 +53,32 @@ export const AuthProvider = ({ children }) => {
         }
     };
 
+    const register = async (credentials) => {
+        try{
+            const response = await fetch(process.env.REACT_APP_API_URL + '_api/register', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(credentials),
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                localStorage.setItem('token', data.token);
+                setIsAuthenticated(true);
+            } else {
+                window.alert('El email ya esta siendo utilizado.');
+            }
+
+        } catch (error) {
+            console.log(error);
+            window.alert('Error al registrarse.');
+        }
+    }
+
     return (
-        <AuthContext.Provider value={{ isAuthenticated, login, logout }}>
+        <AuthContext.Provider value={{ isAuthenticated, setIsAuthenticated, login, logout, register }}>
             {children}
         </AuthContext.Provider>
     );
