@@ -25,7 +25,6 @@ function OrdersPage() {
                 }
             })
                 .then(response => {
-                    //TODO ver si no esta autenticado
                     if(response.status == 401){
                         setErrorMessage('Error de sesión');
                         setIsAuthenticated(false);
