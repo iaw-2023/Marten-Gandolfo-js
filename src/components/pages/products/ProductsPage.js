@@ -67,10 +67,11 @@ export default function ProductsPage(){
 
     const handlePageChange = (pageChange) => {
         let url;
+        const prefix = process.env.REACT_APP_API_URL.substring(0, process.env.REACT_APP_API_URL.indexOf(':')) + ':';
         if(pageChange == 1)
-            url = products.next_page_url;
+            url = prefix + products.next_page_url.substring(products.next_page_url.indexOf(':') + 1);
         else
-            url = products.prev_page_url;
+            url = prefix + products.prev_page_url.substring(products.prev_page_url.indexOf(':') + 1);
         if(url != null){
             setIsLoadingProducts(true);
             fetchProducts(url);
