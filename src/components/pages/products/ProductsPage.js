@@ -20,7 +20,7 @@ export default function ProductsPage(){
     const fetchProducts = (url) => {
         fetch(url)
           .then(response => {
-            if(!response.ok) throw new Error('Error al cargar los productos');
+            if(!response.ok){setErrorMessage('Error al cargar los productos'); return ;}
             return response.json();
           })
           .then((data) => {
@@ -29,14 +29,14 @@ export default function ProductsPage(){
           })
           .catch(error => {
             setIsLoadingProducts(false);
-            setErrorMessage(error.message);
+            setErrorMessage('Error al cargar los productos');
         });
     }
 
     useEffect(() => {
         fetch(process.env.REACT_APP_API_URL + '_api/categories')
           .then(response => {
-            if(!response.ok) throw new Error('Error al cargar las categorías');
+            if(!response.ok){setErrorMessage('Error al cargar las categorías'); return ;}
             return response.json();
           })
           .then((data) => {
@@ -45,7 +45,7 @@ export default function ProductsPage(){
           })
           .catch(error => {
             setIsLoadingCategories(false);
-            setErrorMessage(error.message);
+            setErrorMessage('Error al cargar las categorías');
         });
         fetchProducts(process.env.REACT_APP_API_URL + '_api/products');
       }, []);

@@ -19,9 +19,9 @@ function ProductDetailsPage() {
   useEffect(() => {
     fetch(process.env.REACT_APP_API_URL + `_api/products/${id}`)
       .then(response => {
-        if(response.status === 400) throw new Error('Código de producto inválido');
-        if(response.status === 404) throw new Error('Producto no encontrado');
-        if(!response.ok) throw new Error('Error al cargar el producto');
+        if(response.status === 400){setErrorMessage('Código de producto inválido'); return ;}
+        if(response.status === 404){setErrorMessage('Producto no encontrado'); return ;}
+        if(!response.ok){setErrorMessage('Error al cargar el producto'); return ;}
         return response.json();
       })
       .then(data => {
@@ -30,7 +30,7 @@ function ProductDetailsPage() {
       })
       .catch(error => {
         setIsLoading(false);
-        setErrorMessage(error.message);
+        setErrorMessage('Error al cargar el producto');
     });
   }, [id]);
 

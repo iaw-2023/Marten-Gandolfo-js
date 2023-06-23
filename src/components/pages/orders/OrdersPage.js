@@ -29,9 +29,9 @@ function OrdersPage() {
                     if(response.status == 401){
                         setErrorMessage('Error de sesión');
                         setIsAuthenticated(false);
-                        throw new Error('Error de sesión');
+                        return ;
                     }
-                    if(!response.ok) throw new Error('Error al cargar los pedidos');
+                    if(!response.ok){setErrorMessage('Error al cargar los pedidos'); return ;}
                     return response.json();
                 })
                 .then(data => {
@@ -40,7 +40,7 @@ function OrdersPage() {
                 })
                 .catch(error => {
                     setIsLoading(false);
-                    setErrorMessage(error.message);
+                    setErrorMessage('Error al cargar los pedidos');
                 });
     };
 

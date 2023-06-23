@@ -13,7 +13,7 @@ export default function HomePage() {
   useEffect(() => {
     fetch(process.env.REACT_APP_API_URL + '_api/products/random/10')
       .then(response => {
-        if(!response.ok) throw new Error('Error al cargar los productos');
+        if(!response.ok){setErrorMessage('Error al cargar los productos'); return ;}
         return response.json();
       })
       .then((data) => {
@@ -22,7 +22,7 @@ export default function HomePage() {
       })
       .catch(error => {
         setIsLoading(false);
-        setErrorMessage(error.message);
+        setErrorMessage('Error al cargar los productos');
     });
   }, []);
 

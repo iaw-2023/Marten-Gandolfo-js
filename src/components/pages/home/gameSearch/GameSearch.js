@@ -27,7 +27,7 @@ export default function GameSearch(){
         const fetchGamePage = (url) => {
           return fetch(url)
             .then(response => {
-              if (!response.ok) throw new Error('Error al cargar juegos');
+              if (!response.ok){setErrorMessage('Error al cargar los juegos'); return ;}
               return response.json();
             });
         };
@@ -39,7 +39,7 @@ export default function GameSearch(){
             setIsLoadingAllGames(false);
           })
           .catch(error => {
-            setErrorMessage(error.message)
+            setErrorMessage('Error al cargar los juegos');
             setIsLoadingAllGames(false);
           });
       };
@@ -47,7 +47,7 @@ export default function GameSearch(){
     const fetchFeaturedGames = () => {
         fetch(process.env.REACT_APP_API_URL + '_api/steam/games/featured')
             .then(response => {
-                if(!response.ok) throw new Error('Error al cargar juegos');
+                if(!response.ok){setErrorMessage('Error al cargar los juegos'); return ;}
                 return response.json();
             })
             .then(data => {
@@ -56,7 +56,7 @@ export default function GameSearch(){
                 setIsLoadingFeaturedGames(false);
             })
             .catch(error => {
-                setErrorMessage(error.message)
+                setErrorMessage('Error al cargar los juegos');
                 setIsLoadingFeaturedGames(false);
             });
     }
@@ -100,7 +100,7 @@ export default function GameSearch(){
         setIsLoadingGameInfo(true);
         fetch(process.env.REACT_APP_API_URL + '_api/steam/games/' + id)
             .then(response => {
-                if(!response.ok) throw new Error('Error al cargar juegos');
+                if(!response.ok){setErrorMessage('Error al cargar información del juego'); return ;}
                 console.log(response);
                 return response.json();
             })
@@ -110,7 +110,7 @@ export default function GameSearch(){
                 setIsLoadingGameInfo(false);
             })
             .catch(error => {
-                setErrorMessage(error.message);
+                setErrorMessage('Error al cargar información del juego');
                 setIsLoadingGameInfo(false);
             });
     }
