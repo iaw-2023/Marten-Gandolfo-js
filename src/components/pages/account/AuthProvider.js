@@ -29,12 +29,9 @@ export const AuthProvider = ({ children }) => {
             console.log(error);
             window.alert('Error al iniciar sesion.');
         }
-
-        // Lógica para iniciar sesión (llamada a la API, etc.)
     };
 
     const logout = async () => {
-        // Lógica para cerrar sesión (llamada a la API, etc.)
         try{
             await fetch(process.env.REACT_APP_API_URL + '_api/logout', {
                 method: 'GET',
@@ -44,7 +41,6 @@ export const AuthProvider = ({ children }) => {
                 }
             });
 
-            localStorage.setItem('token', '');
             setIsAuthenticated(false);
 
         } catch (error) {
@@ -124,6 +120,11 @@ export const AuthProvider = ({ children }) => {
             window.alert('Error al recuperar contraseña.');
         }
     }
+
+    useEffect(() => {
+        if(!isAuthenticated)
+            localStorage.setItem('token', '');
+    }, [isAuthenticated])
 
     return (
         <AuthContext.Provider value={{ isAuthenticated, setIsAuthenticated, login, logout, register, requestPasswordReset, resetPassword }}>

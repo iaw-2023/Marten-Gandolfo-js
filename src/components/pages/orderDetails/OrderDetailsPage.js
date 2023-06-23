@@ -6,6 +6,7 @@ import ErrorMessage from '../../ErrorMessage';
 import OrderDetailsTable from '../orders/OrderDetailsTable';
 import { AuthContext } from '../account/AuthProvider';
 import Login from '../account/Login';
+import Register from '../account/Register';
 
 export default function OrderDetailsPage(){
     const { id } = useParams();
@@ -45,9 +46,11 @@ export default function OrderDetailsPage(){
     }, [isAuthenticated]);
 
     return (
-        <div class="borderBottom text-center">
-            <h1>Detalle de Pedido</h1>
-            <img src="/shopping_bag.png" width="200px" alt="..."/>
+        <div>
+            <div class="borderBottom text-center">
+                <img src="/shopping_bag.png" width="200px" alt="..."/>
+                <h1>Detalle de Pedido</h1>
+            </div>
             {isAuthenticated ? (
                 isLoading ? 
                     <LoadingSpinner />
@@ -61,6 +64,7 @@ export default function OrderDetailsPage(){
                 <div>
                     <h3 class="m-4">Inicie sesión para ver su pedidos</h3>
                     <Login />
+                    <Register />
                 </div>
             }
         </div>

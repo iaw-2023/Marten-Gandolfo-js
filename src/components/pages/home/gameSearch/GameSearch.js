@@ -129,7 +129,10 @@ export default function GameSearch(){
                         <h2 class='m-1' >Buscador de juegos</h2>
                         <GameSearchBar handleClearSearch={handleClearSearch} searchTerm={searchTerm} handleSearchTermChange={handleSearchTermChange} handleSearch={handleSearch} />
                         {isLoadingAllGames || isLoadingFeaturedGames || isLoadingSpecificGames || isLoadingGameInfo ?
-                            <LoadingSpinner />
+                            <div>
+                                <h4 class="text-center">Cargando juegos, esto puede demorar unos segundos...</h4>
+                                <LoadingSpinner />
+                            </div>
                         :
                             specificGames &&
                                 gameInfo ?
