@@ -13,7 +13,7 @@ export default function OrderDetailsPage(){
     const [order, setOrder] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
     const [errorMessage, setErrorMessage] = useState('');
-    const { isAuthenticated } = useContext(AuthContext);
+    const { isAuthenticated, setIsAuthenticated } = useContext(AuthContext);
 
     const fetchOrder = () => {
         if(isAuthenticated)
@@ -24,6 +24,11 @@ export default function OrderDetailsPage(){
                 }
             })
                 .then(response => {
+                    if(response.status == 401){
+                        setErrorMessage('Error de sesión');
+                        setIsAuthenticated(false);
+                        throw new Error('Error de sesión');
+                    }
                     if(!response.ok)  throw new Error('Error al cargar el pedido');
                     return response.json();
                 })

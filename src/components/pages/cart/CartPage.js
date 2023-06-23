@@ -15,7 +15,7 @@ export default function CartPage(){
     const [products, setProducts] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
     const [errorMessage, setErrorMessage] = useState('');
-    const { isAuthenticated } = useContext(AuthContext);
+    const { isAuthenticated, setIsAuthenticated } = useContext(AuthContext);
     
     const handleRemoveItem = (itemId) => {
         const updatedCartItems = cartItems.filter(item => item.id !== itemId);
@@ -67,6 +67,9 @@ export default function CartPage(){
                     handleToastSuccessShow();
                     setCartItems([]);
                 } else {
+                    if(response.status == 401){
+                        setIsAuthenticated(false);
+                    }
                     handleToastFailureShow();
                     fetchProductDetails();
                 }

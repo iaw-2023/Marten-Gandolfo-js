@@ -14,7 +14,7 @@ function OrdersPage() {
     const [orders, setOrders] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const [errorMessage, setErrorMessage] = useState('');
-    const { isAuthenticated } = useContext(AuthContext);
+    const { isAuthenticated, setIsAuthenticated } = useContext(AuthContext);
 
     const fetchOrders = () => {
         if(isAuthenticated)
@@ -26,6 +26,11 @@ function OrdersPage() {
             })
                 .then(response => {
                     //TODO ver si no esta autenticado
+                    if(response.status == 401){
+                        setErrorMessage('Error de sesión');
+                        setIsAuthenticated(false);
+                        throw new Error('Error de sesión');
+                    }
                     if(!response.ok) throw new Error('Error al cargar los pedidos');
                     return response.json();
                 })
