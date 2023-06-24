@@ -172,7 +172,7 @@ export default function CartPage(){
                     </>
             }
 
-            <ToastComponent id={'liveToastSuccess'} toastTitle={'Muchas gracias por su compra!'} toastBody={'Usted recibira un correo con informacion sobre su pedido en Master Gaming.'} addButton={false} buttonText={''} buttonLink={''}/>
+            <ToastComponent id={'liveToastSuccess'} toastTitle={'Muchas gracias por su compra!'} toastBody={'Su compra ha sido confirmada, podrá verla en la pestaña de Pedidos.'} addButton={false} buttonText={''} buttonLink={''}/>
 
             <ToastComponent id={'liveToastFailure'} toastTitle={'Lo sentimos! Hubo un error en su compra.'} toastBody={'Si el error periste comuniquese con el equipo de Master Gaming al correo mastergaming.sa@gmail.com.'} addButton={false} buttonText={''} buttonLink={''}/>
 
