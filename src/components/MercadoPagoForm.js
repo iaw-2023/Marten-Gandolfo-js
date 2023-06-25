@@ -1,9 +1,6 @@
 import { initMercadoPago, CardPayment } from "@mercadopago/sdk-react";
-import { useState } from "react";
 
-export default function MercadoPagoForm ({ getTotalPrice, fetchProductDetails,  errorPayment, successfulPayment}) {
-
-    const [cartItems, setCartItems] = useState(JSON.parse(localStorage.getItem('cart')) || []);
+export default function MercadoPagoForm ({ cartItems, getTotalPrice,  errorPayment, successfulPayment}) {
 
     const order = {
         products: cartItems.map(item => ({

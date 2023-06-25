@@ -174,8 +174,8 @@ export default function CartPage(){
                                     <p>Al realizar esta compra usted confirma que ha leido los terminos y condiciones.</p>
                                 </div>
                                     <MercadoPagoForm
+                                        cartItems={cartItems}
                                         getTotalPrice={getTotalPrice}
-                                        fetchProductDetails={fetchProductDetails}
                                         errorPayment={errorPayment}
                                         successfulPayment={successfulPayment}
                                     />
