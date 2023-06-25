@@ -43,8 +43,6 @@ export default function MercadoPagoForm ({ cartItems, getTotalPrice,  errorPayme
             order: order,
             cardFormData: cardFormData
         };
-        
-        console.log(JSON.stringify(dataToSend));
 
         // callback llamado cuando el usuario haga clic en el botón enviar los datos
         // ejemplo de envío de los datos recolectados por el Brick a su servidor
@@ -59,7 +57,6 @@ export default function MercadoPagoForm ({ cartItems, getTotalPrice,  errorPayme
             })
             .then((response) => {
                 // recibir el resultado del pago
-                console.log("Respuesta de pago recibida para evaluar");
                 if (!response.ok) {
                     errorPayment();
                     throw new Error("Error con el pago.");
@@ -67,19 +64,15 @@ export default function MercadoPagoForm ({ cartItems, getTotalPrice,  errorPayme
                 return response.json();
             })
             .then((data) => {
-                console.log("Respuesta de pago recibida exitosamente:", data);
                 if (data.status !== undefined && data.status === "approved"){
-                    console.log("Compra exitosa, se acredito el pago");
                     successfulPayment();
                 }
             })
             .then((response) => {
                 // resolve
-                console.log("Resuelvo");
                 resolve();
             })
             .catch((error) => {
-                console.log("Error");
                 errorPayment();
                 // tratar respuesta de error al intentar crear el pago
                 reject();
