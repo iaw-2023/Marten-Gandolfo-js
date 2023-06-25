@@ -10,13 +10,13 @@ export default function Register(){
     const [passwordConfirmation, setPasswordConfirmation] = useState('');
     const [isEmailValid, setIsEmailValid] = useState(false);
     const [isPasswordValid, setIsPasswordValid] = useState(false);
-    const { register, isAuthLoading } = useContext(AuthContext);
+    const { register, isAuthLoading, handleToastShow } = useContext(AuthContext);
 
     const handleRegister = () => {
         if(!isEmailValid){
-            window.alert('El email es inválido');
+            handleToastShow('El email es inválido');
         } else if(!isPasswordValid){
-            window.alert('Las contraseñas deben coincidir y tener al menos 4 caracteres');
+            handleToastShow('Las contraseñas deben coincidir y tener al menos 4 caracteres');
         } else{
             const credentials = {
                 email: email,

@@ -7,11 +7,11 @@ import LoadingSpinner from '../../LoadingSpinner';
 export default function ForgotPassword(){
     const [email, setEmail] = useState('');
     const [isEmailValid, setIsEmailValid] = useState(false);
-    const { requestPasswordReset, isAuthLoading } = useContext(AuthContext);
+    const { requestPasswordReset, isAuthLoading, handleToastShow } = useContext(AuthContext);
 
     const handleRequestPasswordReset = () => {
         if(!isEmailValid){
-            window.alert('El email es inválido');
+            handleToastShow('El email es inválido');
         } else{
             requestPasswordReset(email);
         }

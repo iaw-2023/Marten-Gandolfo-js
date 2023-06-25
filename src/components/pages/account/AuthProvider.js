@@ -1,12 +1,23 @@
 import { useNavigate } from "react-router-dom";
 import React, { useEffect, useState, createContext } from 'react';
+import 'bootstrap/dist/css/bootstrap.css';
+import ToastComponent from '../../ToastComponent';
+import { Toast } from 'bootstrap/dist/js/bootstrap.bundle';
 
 export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
     const [isAuthenticated, setIsAuthenticated] = useState(localStorage.getItem('token'));
     const [isAuthLoading, setIsAuthLoading] = useState(false);
+    const [toastMessage, setToastMessage] = useState('');
     const navigate = useNavigate();
+
+    const handleToastShow = (message) => {
+      setToastMessage(message);
+      const toastElement = document.getElementById('authToast');
+      const toast = new Toast(toastElement);
+      toast.show();
+    };
 
     const login = async (credentials) => {
         try{
@@ -26,13 +37,13 @@ export const AuthProvider = ({ children }) => {
                 localStorage.setItem('token', data.token);
                 setIsAuthenticated(true);
             } else {
-                window.alert('Credenciales invalidas.');
+                handleToastShow('Credenciales invalidas.');
             }
 
         } catch (error) {
             setIsAuthLoading(false);
             console.log(error);
-            window.alert('Error al iniciar sesion.');
+            handleToastShow('Error al iniciar sesion.');
         }
     };
 
@@ -53,7 +64,7 @@ export const AuthProvider = ({ children }) => {
         } catch (error) {
             setIsAuthLoading(false);
             console.log(error);
-            window.alert('Error al cerrar sesion.');
+            handleToastShow('Error al cerrar sesion.');
         }
     };
 
@@ -74,13 +85,13 @@ export const AuthProvider = ({ children }) => {
                 localStorage.setItem('token', data.token);
                 setIsAuthenticated(true);
             } else {
-                window.alert('El email ya esta siendo utilizado.');
+                handleToastShow('El email ya esta siendo utilizado.');
             }
 
         } catch (error) {
             setIsAuthLoading(false);
             console.log(error);
-            window.alert('Error al registrarse.');
+            handleToastShow('Error al registrarse.');
         }
     }
 
@@ -98,14 +109,14 @@ export const AuthProvider = ({ children }) => {
 
             if (response.ok) {
                 const data = await response.json();
-                window.alert('Se enviará un correo a su email para recuperar su contraseña.');
+                handleToastShow('Se enviará un correo a su email para recuperar su contraseña.');
             } else {
-                window.alert('Error al solicitar recuperación de contraseña.');
+                handleToastShow('Error al solicitar recuperación de contraseña.');
             }
 
         } catch (error) {
             setIsAuthLoading(false);
-            window.alert('Error al solicitar recuperación de contraseña.');
+            handleToastShow('Error al solicitar recuperación de contraseña.');
         }
     }
 
@@ -126,15 +137,15 @@ export const AuthProvider = ({ children }) => {
                 localStorage.setItem('token', data.token);
                 setIsAuthenticated(true);
                 navigate('/');
-                window.alert('Contraseña reestablecida.');
+                handleToastShow('Contraseña reestablecida.');
             } else {
-                window.alert('Error al recuperar contraseña.');
+                handleToastShow('Error al recuperar contraseña.');
             }
 
         } catch (error) {
             setIsAuthLoading(false);
             console.log(error);
-            window.alert('Error al recuperar contraseña.');
+            handleToastShow('Error al recuperar contraseña.');
         }
     }
 
@@ -144,8 +155,9 @@ export const AuthProvider = ({ children }) => {
     }, [isAuthenticated])
 
     return (
-        <AuthContext.Provider value={{ isAuthenticated, setIsAuthenticated, login, logout, register, requestPasswordReset, resetPassword, isAuthLoading }}>
+        <AuthContext.Provider value={{ isAuthenticated, setIsAuthenticated, login, logout, register, requestPasswordReset, resetPassword, isAuthLoading, handleToastShow }}>
             {children}
+            <ToastComponent id={'authToast'} toastTitle={'Master Gaming.'} toastBody={toastMessage} ></ToastComponent>
         </AuthContext.Provider>
     );
 };

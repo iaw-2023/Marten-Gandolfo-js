@@ -10,11 +10,11 @@ export default function ResetPassword() {
     const [password, setPassword] = useState('');
     const [passwordConfirmation, setPasswordConfirmation] = useState('');
     const [isPasswordValid, setIsPasswordValid] = useState(false);
-    const { resetPassword, isAuthLoading } = useContext(AuthContext);
+    const { resetPassword, isAuthLoading, handleToastShow } = useContext(AuthContext);
 
     const handleResetPassword = () => {
         if(!isPasswordValid){
-            window.alert('Las contraseñas deben coincidir y tener al menos 4 caracteres');
+            handleToastShow('Las contraseñas deben coincidir y tener al menos 4 caracteres');
         } else{
             const credentials = {
                 token: token,

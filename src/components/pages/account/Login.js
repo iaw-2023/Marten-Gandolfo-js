@@ -10,13 +10,13 @@ export default function Login(){
     const [password, setPassword] = useState('');
     const [isEmailValid, setIsEmailValid] = useState(false);
     const [isPasswordValid, setIsPasswordValid] = useState(false);
-    const { login, isAuthLoading } = useContext(AuthContext);
+    const { login, isAuthLoading, handleToastShow } = useContext(AuthContext);
 
     const handleLogin = () => {
         if(!isEmailValid){
-            window.alert('El email es inválido');
+            handleToastShow('El email es inválido');
         } else if(!isPasswordValid){
-            window.alert('La contraseña debe tener al menos 4 caracteres');
+            handleToastShow('La contraseña debe tener al menos 4 caracteres');
         } else{
             const credentials = {
                 email: email,
