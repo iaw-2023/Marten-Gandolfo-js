@@ -19,6 +19,7 @@ export const AuthProvider = ({ children }) => {
 
             if (response.ok) {
                 const data = await response.json();
+                localStorage.setItem('user_email',credentials['email']);
                 localStorage.setItem('token', data.token);
                 setIsAuthenticated(true);
             } else {

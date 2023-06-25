@@ -9,6 +9,7 @@ import ErrorMessage from '../../ErrorMessage';
 import Login from '../account/Login';
 import { AuthContext } from '../account/AuthProvider';
 import Register from '../account/Register';
+import MercadoPagoForm from '../../MercadoPagoForm';
 
 export default function CartPage(){
     const [cartItems, setCartItems] = useState(JSON.parse(localStorage.getItem('cart')) || []);
@@ -117,6 +118,12 @@ export default function CartPage(){
         setIsLoading(false);
     };
   
+    const getTotalPrice = () => {
+        const subtotals = cartItems.map(item => products[item.id] ? products[item.id].price * item.units : 0);
+        const totalPrice = subtotals.reduce((accumulator, currentValue) => accumulator + currentValue, 0);
+        return totalPrice.toFixed(2);
+    }
+
     useEffect(() => {
         fetchProductDetails();
       }, []);
@@ -150,13 +157,14 @@ export default function CartPage(){
                     </>
                 :
                     <>
-                        <CartTable cartItems={cartItems} products={products} handleUnitsChange={handleUnitsChange} handleRemoveItem={handleRemoveItem}/>
+                        <CartTable cartItems={cartItems} products={products} handleUnitsChange={handleUnitsChange} handleRemoveItem={handleRemoveItem} getTotalPrice={getTotalPrice}/>
                         {isAuthenticated ? 
                             <div class="card">
                                 <h5 class="card-header">Confirmar compra</h5>
                                 <div class="card-body">
                                     <p class="card-text">Al realizar esta compra usted confirma que ha leido los terminos y condiciones.</p>
                                     <button onClick={buyItems} class="btn btn-primary">Comprar</button>
+                                    <MercadoPagoForm buyItems={buyItems} getTotalPrice={getTotalPrice}/>
                                 </div>
                             </div>
                         
