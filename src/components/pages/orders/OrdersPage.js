@@ -80,8 +80,10 @@ function OrdersPage() {
             :
                 <div>
                     <h3 class="m-4">Inicie sesión para ver sus pedidos</h3>
-                    <Login />
-                    <Register />
+                    <div className="loginAndRegisterContainer">
+                        <Login/>
+                        <Register/>
+                    </div>
                 </div>
             }
             

@@ -110,7 +110,7 @@ export default function ProductsPage(){
                     </>
                 ) : (
                     <>
-                        <div class="card-container">
+                        <div class="card-container mt-3 text-center">
                             {products.data.map((product) => (
                                 <ProductCard product={product}></ProductCard>
                             ))}

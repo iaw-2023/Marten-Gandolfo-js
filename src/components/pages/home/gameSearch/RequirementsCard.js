@@ -1,7 +1,7 @@
 export default function RequirementsCard({ label, requirements, requirementsText }){
     return (
         (requirements.processor || requirements.memory || requirements.gpu || requirements.storage || requirementsText) ?
-            <div class='card requirements-card p-2 m-2'>
+            <div class='card requirements-card p-2 m-2 w-100 d-flex'>
                 <h4>{label}</h4>
                 {(requirements.processor || requirements.memory || requirements.gpu || requirements.storage) || !requirementsText ?
                     <div class='p-2'>

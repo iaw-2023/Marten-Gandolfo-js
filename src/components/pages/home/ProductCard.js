@@ -4,7 +4,7 @@ import '../../../App.css'
 
 export default function ProductCard({product}){
     return (
-            <div class="card product-card">
+            <div class="card product-card p-2 m-2 d-flex">
                 <Link class='black-link' to={'/products/' + product.id}>
                     <img src={`data:image/webp;base64,${product.product_image}`} class="card-img-top" alt="" />
                     <div class="card-body">

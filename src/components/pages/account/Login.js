@@ -48,7 +48,7 @@ export default function Login(){
                                 <input type="text" class="form-control mb-3" name="username" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Ingrese aquí su correo"></input>
                                 <input type="password" class="form-control mb-3" name="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Ingrese aquí su contraseña"/>
                                 <button class="btn btn-primary" type="submit" onClick={handleLogin}>Login</button>
-                                <br />
+                                <div class="mb-3"></div>
                                 <Link to={'/forgotpassword'}>¿Olvido su contraseña?</Link>
                             </>
                         }

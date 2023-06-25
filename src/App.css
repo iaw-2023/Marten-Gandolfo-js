@@ -124,16 +124,39 @@
   -webkit-line-clamp: 3;
 }
 
+.order-tr {
+  cursor: pointer;
+}
+
+.table {
+  width: 100%;
+  overflow-x: auto;
+}
+
+@media (max-width: 600px) {
+  .table thead,
+  .table tbody,
+  .table tr,
+  .table th,
+  .table td {
+    display: block;
+  }
+}
+
 .loginAndRegisterContainer {
   display: flex;
+  flex-wrap: wrap;
 }
 
 .loginPage,
 .registerPage {
-  flex: 1;
-  margin-right: 10px;
+  flex-basis: 50%;
 }
 
-.order-tr {
-  cursor: pointer;
+@media (max-width: 800px) {
+  .loginPage,
+  .registerPage {
+    flex-basis: 100%;
+  }
 }
+

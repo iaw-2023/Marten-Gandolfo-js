@@ -183,8 +183,10 @@ export default function CartPage(){
                         :
                             <div>
                                 <h3 class="m-4">Inicie sesión para comprar</h3>
-                                <Login />
-                                <Register />
+                                <div className="loginAndRegisterContainer">
+                                    <Login/>
+                                    <Register/>
+                                </div>
                             </div>
                         }
 
