@@ -8,6 +8,19 @@ export default function OrderDetailsTable({order}){
     order.order_details.forEach(detail => {
         totalCost += parseFloat(detail.subtotal);
     });
+    
+    const fixDateHours = (dateString) => {
+        const date = new Date(dateString);
+        const options = {
+            year: 'numeric',
+            month: 'numeric',
+            day: 'numeric',
+            hour: 'numeric',
+            minute: 'numeric'
+          };
+        date.setHours(date.getHours() - 3);
+        return date.toLocaleString('es-AR', options);
+    }
 
     return (
         <div class="card">
@@ -31,6 +44,7 @@ export default function OrderDetailsTable({order}){
                     </tr>
                 </tbody>
             </table>
+            <h5 class ="m-2">Fecha: {fixDateHours(order.order_date)}</h5>
         </div>
     );
 }

@@ -53,8 +53,8 @@ export default function OrderDetailsPage(){
     return (
         <div>
             <div class="borderBottom text-center">
-                <img src="/shopping_bag.png" width="200px" alt="..."/>
                 <h1>Detalle de Pedido</h1>
+                <img src="/shopping_bag.png" width="200px" alt="..."/>
             </div>
             {isAuthenticated ? (
                 isLoading ? 
