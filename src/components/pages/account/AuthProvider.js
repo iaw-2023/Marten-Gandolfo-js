@@ -42,7 +42,6 @@ export const AuthProvider = ({ children }) => {
 
         } catch (error) {
             setIsAuthLoading(false);
-            console.log(error);
             handleToastShow('Error al iniciar sesion.');
         }
     };
@@ -63,7 +62,6 @@ export const AuthProvider = ({ children }) => {
 
         } catch (error) {
             setIsAuthLoading(false);
-            console.log(error);
             handleToastShow('Error al cerrar sesion.');
         }
     };
@@ -90,7 +88,6 @@ export const AuthProvider = ({ children }) => {
 
         } catch (error) {
             setIsAuthLoading(false);
-            console.log(error);
             handleToastShow('Error al registrarse.');
         }
     }
@@ -144,7 +141,6 @@ export const AuthProvider = ({ children }) => {
 
         } catch (error) {
             setIsAuthLoading(false);
-            console.log(error);
             handleToastShow('Error al recuperar contraseña.');
         }
     }

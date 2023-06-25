@@ -84,9 +84,6 @@ export default function GameSearch(){
     }
 
     const handleClearSearch = () => {
-        /* setGameInfo(null);
-        setSpecificGames(featuredGames);
-        setSearchTerm(''); */
         if(gameInfo){
             setGameInfo(null);
         }
@@ -101,11 +98,9 @@ export default function GameSearch(){
         fetch(process.env.REACT_APP_API_URL + '_api/steam/games/' + id)
             .then(response => {
                 if(!response.ok){setErrorMessage('Error al cargar información del juego'); return ;}
-                console.log(response);
                 return response.json();
             })
             .then(data => {
-                console.log(data);
                 setGameInfo(data[id].data);
                 setIsLoadingGameInfo(false);
             })
@@ -114,11 +109,6 @@ export default function GameSearch(){
                 setIsLoadingGameInfo(false);
             });
     }
-
-    /* console.log(games);
-    if(games)
-        console.log(games.applist.apps.filter(app => app.name == 'Slay the Spire')); */
-    if(gameInfo) console.log(gameInfo.pc_requirements);
 
     return (
         <div class='card p-2'>

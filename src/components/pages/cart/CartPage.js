@@ -41,47 +41,6 @@ export default function CartPage(){
         const toast = new Toast(toastElement);
         toast.show();
     };
-
-    /* const buyItems = async () => {
-        try {
-            const order = {
-                products: cartItems.map(item => ({
-                    id: item.id,
-                    units: item.units
-                }))
-            };
-        
-            const shouldConfirm = window.confirm('¿Quieres confirmar la compra?');
-            if (shouldConfirm) {
-                setIsLoading(true);
-                setErrorMessage('');
-                const response = await fetch(process.env.REACT_APP_API_URL + '_api/orders', {
-                    method: 'POST',
-                    headers: {
-                        'Authorization': 'Bearer ' + localStorage.getItem('token'),
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(order)
-                });
-                
-                if (response.ok) {
-                    handleToastSuccessShow();
-                    setCartItems([]);
-                } else {
-                    if(response.status == 401){
-                        setIsAuthenticated(false);
-                    }
-                    handleToastFailureShow();
-                    fetchProductDetails();
-                }
-                setIsLoading(false);
-            }
-        } catch (error) {
-            console.error('Error al realizar la orden:', error);
-            handleToastFailureShow();
-            setIsLoading(false);
-        }
-    }; */
     
     const successfulPayment = () => {
         handleToastSuccessShow();

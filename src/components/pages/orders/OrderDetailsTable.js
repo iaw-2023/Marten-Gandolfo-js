@@ -1,8 +1,6 @@
 import OrderDetailsRow from "./OrderDetailsRow";
 
 export default function OrderDetailsTable({order}){
-    console.log(order);
-
     let totalCost = 0;
     
     order.order_details.forEach(detail => {

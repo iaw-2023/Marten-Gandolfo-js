@@ -6,7 +6,6 @@ export default function OrdersTable({ orders }){
     const navigate = useNavigate();
 
     orders.sort((a, b) => new Date(b.order_date) - new Date(a.order_date));
-    console.log(orders.map(order => order.order_date + ' - ' + new Date(order.order_date + 'Z')));
     
     const fixDateHours = (dateString) => {
         const date = new Date(dateString);
