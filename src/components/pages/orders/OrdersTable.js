@@ -4,7 +4,22 @@ import '../../../App.css';
 export default function OrdersTable({ orders }){
     const navigate = useNavigate();
 
-    console.log(orders);
+    orders.sort((a, b) => new Date(b.order_date) - new Date(a.order_date));
+    console.log(orders.map(order => order.order_date + ' - ' + new Date(order.order_date + 'Z')));
+    
+    const fixDateHours = (dateString) => {
+        const date = new Date(dateString);
+        const options = {
+            year: 'numeric',
+            month: 'numeric',
+            day: 'numeric',
+            hour: 'numeric',
+            minute: 'numeric'
+          };
+        date.setHours(date.getHours() - 3);
+        return date.toLocaleString('es-AR', options);
+    }
+
     return (
         <div class="card">
             <table class="table text-center align-middle">
@@ -17,7 +32,7 @@ export default function OrdersTable({ orders }){
                     {orders.map(order => (
                             <tr class="order-tr" key={order.id} onClick={() => {navigate('/orders/' + order.id)}}>
                                 <td width={150}><img src={`data:image/webp;base64,${order.image}`} alt='' width="150" /></td>
-                                <td>{order.order_date}</td>
+                                <td>{fixDateHours(order.order_date)}</td>
                                 <td>${order.price}</td>
                             </tr>
                     ))}

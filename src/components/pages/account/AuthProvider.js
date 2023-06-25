@@ -5,10 +5,12 @@ export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
     const [isAuthenticated, setIsAuthenticated] = useState(localStorage.getItem('token'));
+    const [isAuthLoading, setIsAuthLoading] = useState(false);
     const navigate = useNavigate();
 
     const login = async (credentials) => {
         try{
+            setIsAuthLoading(true);
             const response = await fetch(process.env.REACT_APP_API_URL + '_api/login', {
                 method: 'POST',
                 headers: {
@@ -16,6 +18,7 @@ export const AuthProvider = ({ children }) => {
                 },
                 body: JSON.stringify(credentials),
             });
+            setIsAuthLoading(false);
 
             if (response.ok) {
                 const data = await response.json();
@@ -27,6 +30,7 @@ export const AuthProvider = ({ children }) => {
             }
 
         } catch (error) {
+            setIsAuthLoading(false);
             console.log(error);
             window.alert('Error al iniciar sesion.');
         }
@@ -34,6 +38,7 @@ export const AuthProvider = ({ children }) => {
 
     const logout = async () => {
         try{
+            setIsAuthLoading(true);
             await fetch(process.env.REACT_APP_API_URL + '_api/logout', {
                 method: 'GET',
                 headers: {
@@ -41,10 +46,12 @@ export const AuthProvider = ({ children }) => {
                     'Content-Type': 'application/json',
                 }
             });
+            setIsAuthLoading(false);
 
             setIsAuthenticated(false);
 
         } catch (error) {
+            setIsAuthLoading(false);
             console.log(error);
             window.alert('Error al cerrar sesion.');
         }
@@ -52,6 +59,7 @@ export const AuthProvider = ({ children }) => {
 
     const register = async (credentials) => {
         try{
+            setIsAuthLoading(true);
             const response = await fetch(process.env.REACT_APP_API_URL + '_api/register', {
                 method: 'POST',
                 headers: {
@@ -59,6 +67,7 @@ export const AuthProvider = ({ children }) => {
                 },
                 body: JSON.stringify(credentials),
             });
+            setIsAuthLoading(false);
 
             if (response.ok) {
                 const data = await response.json();
@@ -69,6 +78,7 @@ export const AuthProvider = ({ children }) => {
             }
 
         } catch (error) {
+            setIsAuthLoading(false);
             console.log(error);
             window.alert('Error al registrarse.');
         }
@@ -76,6 +86,7 @@ export const AuthProvider = ({ children }) => {
 
     const requestPasswordReset = async (email) => {
         try{
+            setIsAuthLoading(true);
             const response = await fetch(process.env.REACT_APP_API_URL + '_api/requestpassword', {
                 method: 'POST',
                 headers: {
@@ -83,6 +94,7 @@ export const AuthProvider = ({ children }) => {
                 },
                 body: JSON.stringify({email: email}),
             });
+            setIsAuthLoading(false);
 
             if (response.ok) {
                 const data = await response.json();
@@ -92,12 +104,14 @@ export const AuthProvider = ({ children }) => {
             }
 
         } catch (error) {
+            setIsAuthLoading(false);
             window.alert('Error al solicitar recuperación de contraseña.');
         }
     }
 
     const resetPassword = async (credentials) => {
         try{
+            setIsAuthLoading(true);
             const response = await fetch(process.env.REACT_APP_API_URL + '_api/resetpassword', {
                 method: 'POST',
                 headers: {
@@ -105,6 +119,7 @@ export const AuthProvider = ({ children }) => {
                 },
                 body: JSON.stringify(credentials),
             });
+            setIsAuthLoading(false);
 
             if (response.ok) {
                 const data = await response.json();
@@ -117,6 +132,7 @@ export const AuthProvider = ({ children }) => {
             }
 
         } catch (error) {
+            setIsAuthLoading(false);
             console.log(error);
             window.alert('Error al recuperar contraseña.');
         }
@@ -128,7 +144,7 @@ export const AuthProvider = ({ children }) => {
     }, [isAuthenticated])
 
     return (
-        <AuthContext.Provider value={{ isAuthenticated, setIsAuthenticated, login, logout, register, requestPasswordReset, resetPassword }}>
+        <AuthContext.Provider value={{ isAuthenticated, setIsAuthenticated, login, logout, register, requestPasswordReset, resetPassword, isAuthLoading }}>
             {children}
         </AuthContext.Provider>
     );

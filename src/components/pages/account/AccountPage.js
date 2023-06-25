@@ -4,29 +4,32 @@ import Register from './Register';
 import '../../../App.css'
 import React, { useContext } from 'react';
 import { AuthContext } from './AuthProvider';
+import LoadingSpinner from '../../LoadingSpinner';
 
 export default function AccountPage(){
 
-    const { isAuthenticated, logout } = useContext(AuthContext);
+    const { isAuthenticated, logout, isAuthLoading } = useContext(AuthContext);
 
     return (
         <>
-            {isAuthenticated ? (
-                <div class="borderBottom text-center">
-                    <h1>Usted esta navegando como usuario registrado</h1>
-                    <button class="btn btn-primary" type="submit" onClick={logout}>Cerrar sesion</button>
-                </div>
-            ) : (
-                <>
-                    <div class="borderBottom text-center">
-                        <h1>Usted esta navegando como visitante</h1>
-                    </div>
+            <div class="borderBottom text-center">
+                <h1>Usted esta navegando como {isAuthenticated ? 'usuario registrado' : 'invitado'}</h1>
+            </div>
+            {
+                isAuthenticated ? (
+                    isAuthLoading ? 
+                        <LoadingSpinner />
+                    :
+                        <div class="text-center">
+                            <button class="btn btn-primary" type="submit" onClick={logout}>Cerrar sesion</button>
+                        </div>
+                ) : (
                     <div className="loginAndRegisterContainer">
                         <Login/>
                         <Register/>
                     </div>
-                </>
-            )}
+                )
+            }
         </>
     );
 }

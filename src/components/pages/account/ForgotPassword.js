@@ -2,15 +2,19 @@ import 'bootstrap/dist/css/bootstrap.css';
 import '../../../App.css';
 import { AuthContext } from './AuthProvider';
 import React, { useContext, useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import LoadingSpinner from '../../LoadingSpinner';
 
 export default function ForgotPassword(){
     const [email, setEmail] = useState('');
     const [isEmailValid, setIsEmailValid] = useState(false);
-    const { requestPasswordReset } = useContext(AuthContext);
+    const { requestPasswordReset, isAuthLoading } = useContext(AuthContext);
 
     const handleRequestPasswordReset = () => {
-        requestPasswordReset(email);
+        if(!isEmailValid){
+            window.alert('El email es inválido');
+        } else{
+            requestPasswordReset(email);
+        }
     };
     
     useEffect(() => {
@@ -24,8 +28,14 @@ export default function ForgotPassword(){
                 <div class="card">
                     <h5 class="card-header">Solicitar recuperar contraseña</h5>
                     <div class="card-body">
-                        <input type="text" class="form-control mb-3" name="username" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Ingrese aquí su correo"></input>
-                        <button class="btn btn-primary" disabled={!isEmailValid} type="submit" onClick={handleRequestPasswordReset}>Solicitar recuperar contraseña</button>
+                        {isAuthLoading ? 
+                                <LoadingSpinner />
+                            :
+                                <>
+                                    <input type="text" class="form-control mb-3" name="username" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Ingrese aquí su correo"></input>
+                                    <button class="btn btn-primary" type="submit" onClick={handleRequestPasswordReset}>Solicitar recuperar contraseña</button>
+                                </>
+                        }
                     </div>
                 </div>
             </div>
