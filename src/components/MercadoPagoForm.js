@@ -1,6 +1,17 @@
 import { initMercadoPago, CardPayment } from "@mercadopago/sdk-react";
+import { useState } from "react";
 
-export default function MercadoPagoForm ({ buyItems, getTotalPrice }) {
+export default function MercadoPagoForm ({ getTotalPrice, fetchProductDetails,  errorPayment, successfulPayment}) {
+
+    const [cartItems, setCartItems] = useState(JSON.parse(localStorage.getItem('cart')) || []);
+
+    const order = {
+        products: cartItems.map(item => ({
+            id: item.id,
+            units: item.units
+        }))
+    };
+
     initMercadoPago('TEST-672f85d4-ce06-4bd5-b0ed-e038d3924111', {
         locale: 'es',
     });
@@ -13,7 +24,10 @@ export default function MercadoPagoForm ({ buyItems, getTotalPrice }) {
     };
         
     const customization = {
-        maxInstallments: 12,
+        paymentMethods: {
+            minInstallments: 1,
+            maxInstallments: 1,
+        },
         visual: {
             style: {
                 theme: 'default', // | 'dark' | 'bootstrap' | 'flat'
@@ -27,6 +41,14 @@ export default function MercadoPagoForm ({ buyItems, getTotalPrice }) {
     };
             
     const onSubmit = (cardFormData) => {
+
+        const dataToSend = {
+            order: order,
+            cardFormData: cardFormData
+        };
+        
+        console.log(JSON.stringify(dataToSend));
+
         // callback llamado cuando el usuario haga clic en el botón enviar los datos
         // ejemplo de envío de los datos recolectados por el Brick a su servidor
         return new Promise((resolve, reject) => {
@@ -36,18 +58,22 @@ export default function MercadoPagoForm ({ buyItems, getTotalPrice }) {
                     'Authorization': 'Bearer ' + localStorage.getItem('token'),
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify(cardFormData),
+                body: JSON.stringify(dataToSend), //JSON.stringify(cardFormData),
             })
             .then((response) => {
                 // recibir el resultado del pago
                 console.log("Respuesta de pago recibida para evaluar");
-                if (!response.ok) throw new Error("Error con el pago.");
+                if (!response.ok) {
+                    errorPayment();
+                    throw new Error("Error con el pago.");
+                }
                 return response.json();
             })
             .then((data) => {
                 console.log("Respuesta de pago recibida exitosamente:", data);
                 if (data.status !== undefined && data.status === "approved"){
-                    buyItems();
+                    console.log("Compra exitosa, se acredito el pago");
+                    successfulPayment();
                 }
             })
             .then((response) => {
@@ -57,6 +83,7 @@ export default function MercadoPagoForm ({ buyItems, getTotalPrice }) {
             })
             .catch((error) => {
                 console.log("Error");
+                errorPayment();
                 // tratar respuesta de error al intentar crear el pago
                 reject();
             });
@@ -64,17 +91,17 @@ export default function MercadoPagoForm ({ buyItems, getTotalPrice }) {
     };
         
     const onError = (error) => {
-            // callback llamado para todos los casos de error de Brick
+        // callback llamado para todos los casos de error de Brick
     };
 
     return (
         <>
             <CardPayment
-            initialization={initialization}
-            customization={customization}
-            onSubmit={onSubmit}
-            onReady={onReady}
-            onError={onError}
+                initialization={initialization}
+                customization={customization}
+                onSubmit={onSubmit}
+                onReady={onReady}
+                onError={onError}
             />
         </>
         

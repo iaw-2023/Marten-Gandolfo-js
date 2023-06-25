@@ -42,7 +42,7 @@ export default function CartPage(){
         toast.show();
     };
 
-    const buyItems = async () => {
+    /* const buyItems = async () => {
         try {
             const order = {
                 products: cartItems.map(item => ({
@@ -81,8 +81,17 @@ export default function CartPage(){
             handleToastFailureShow();
             setIsLoading(false);
         }
-    };
+    }; */
     
+    const successfulPayment = () => {
+        handleToastSuccessShow();
+        setCartItems([]);
+    }
+
+    const errorPayment = () => {
+        handleToastFailureShow();
+    }
+
     const handleUnitsChange = (itemId, unitsChange) => {
         const updatedCartItems = cartItems.map(item => {
           if (item.id === itemId && item.units + unitsChange > 0) {
@@ -158,16 +167,19 @@ export default function CartPage(){
                 :
                     <>
                         <CartTable cartItems={cartItems} products={products} handleUnitsChange={handleUnitsChange} handleRemoveItem={handleRemoveItem} getTotalPrice={getTotalPrice}/>
-                        {isAuthenticated ? 
-                            <div class="card">
-                                <h5 class="card-header">Confirmar compra</h5>
-                                <div class="card-body">
-                                    <p class="card-text">Al realizar esta compra usted confirma que ha leido los terminos y condiciones.</p>
-                                    <button onClick={buyItems} class="btn btn-primary">Comprar</button>
-                                    <MercadoPagoForm buyItems={buyItems} getTotalPrice={getTotalPrice}/>
+                        {isAuthenticated ?
+                            <div>
+                                <div class="text-center mt-5">
+                                    <h5>Confirmar compra</h5>
+                                    <p>Al realizar esta compra usted confirma que ha leido los terminos y condiciones.</p>
                                 </div>
+                                    <MercadoPagoForm
+                                        getTotalPrice={getTotalPrice}
+                                        fetchProductDetails={fetchProductDetails}
+                                        errorPayment={errorPayment}
+                                        successfulPayment={successfulPayment}
+                                    />
                             </div>
-                        
                         :
                             <div>
                                 <h3 class="m-4">Inicie sesión para comprar</h3>
