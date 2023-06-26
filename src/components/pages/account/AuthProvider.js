@@ -81,6 +81,7 @@ export const AuthProvider = ({ children }) => {
             if (response.ok) {
                 const data = await response.json();
                 localStorage.setItem('token', data.token);
+                handleToastShow('Se ha registrado exitosamente.');
                 setIsAuthenticated(true);
             } else {
                 handleToastShow('El email ya esta siendo utilizado.');
