@@ -20,7 +20,7 @@ export default function ProductsPage(){
     const fetchProducts = (url) => {
         fetch(url)
           .then(response => {
-            if(!response.ok) throw new Error('Error al cargar los productos');
+            if(!response.ok){setErrorMessage('Error al cargar los productos'); return ;}
             return response.json();
           })
           .then((data) => {
@@ -29,14 +29,14 @@ export default function ProductsPage(){
           })
           .catch(error => {
             setIsLoadingProducts(false);
-            setErrorMessage(error.message);
+            setErrorMessage('Error al cargar los productos');
         });
     }
 
     useEffect(() => {
-        fetch('https://marten-gandolfo-laravel.vercel.app/_api/categories')
+        fetch(process.env.REACT_APP_API_URL + '_api/categories')
           .then(response => {
-            if(!response.ok) throw new Error('Error al cargar las categorías');
+            if(!response.ok){setErrorMessage('Error al cargar las categorías'); return ;}
             return response.json();
           })
           .then((data) => {
@@ -45,9 +45,9 @@ export default function ProductsPage(){
           })
           .catch(error => {
             setIsLoadingCategories(false);
-            setErrorMessage(error.message);
+            setErrorMessage('Error al cargar las categorías');
         });
-        fetchProducts('https://marten-gandolfo-laravel.vercel.app/_api/products');
+        fetchProducts(process.env.REACT_APP_API_URL + '_api/products');
       }, []);
 
     const handleSearch = () => {
@@ -67,10 +67,11 @@ export default function ProductsPage(){
 
     const handlePageChange = (pageChange) => {
         let url;
+        const prefix = process.env.REACT_APP_API_URL.substring(0, process.env.REACT_APP_API_URL.indexOf(':')) + ':';
         if(pageChange == 1)
-            url = products.next_page_url;
+            url = prefix + products.next_page_url.substring(products.next_page_url.indexOf(':') + 1);
         else
-            url = products.prev_page_url;
+            url = prefix + products.prev_page_url.substring(products.prev_page_url.indexOf(':') + 1);
         if(url != null){
             setIsLoadingProducts(true);
             fetchProducts(url);
@@ -78,7 +79,7 @@ export default function ProductsPage(){
     };
 
     useEffect(() => {
-        let url = 'https://marten-gandolfo-laravel.vercel.app/_api/products';
+        let url = process.env.REACT_APP_API_URL + '_api/products';
         if(searchTerm != '')
             url += '/search/' + searchTerm;
         if(selectedCategory != -1)
@@ -109,7 +110,7 @@ export default function ProductsPage(){
                     </>
                 ) : (
                     <>
-                        <div class="card-container">
+                        <div class="card-container mt-3 text-center">
                             {products.data.map((product) => (
                                 <ProductCard product={product}></ProductCard>
                             ))}

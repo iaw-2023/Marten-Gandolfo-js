@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { Link } from 'react-router-dom';
 import CartTable from './CartTable';
 import LoadingSpinner from '../../LoadingSpinner';
@@ -6,14 +6,17 @@ import ToastComponent from '../../ToastComponent';
 import 'bootstrap/dist/css/bootstrap.css';
 import { Toast } from 'bootstrap/dist/js/bootstrap.bundle';
 import ErrorMessage from '../../ErrorMessage';
+import Login from '../account/Login';
+import { AuthContext } from '../account/AuthProvider';
+import Register from '../account/Register';
+import MercadoPagoForm from '../../MercadoPagoForm';
 
 export default function CartPage(){
     const [cartItems, setCartItems] = useState(JSON.parse(localStorage.getItem('cart')) || []);
     const [products, setProducts] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
-    const [email, setEmail] = useState('');
-    const [isEmailValid, setIsEmailValid] = useState(false);
     const [errorMessage, setErrorMessage] = useState('');
+    const { isAuthenticated, setIsAuthenticated } = useContext(AuthContext);
     
     const handleRemoveItem = (itemId) => {
         const updatedCartItems = cartItems.filter(item => item.id !== itemId);
@@ -38,45 +41,16 @@ export default function CartPage(){
         const toast = new Toast(toastElement);
         toast.show();
     };
-
-    const buyItems = async () => {
-        try {
-            const order = {
-                email: email,
-                products: cartItems.map(item => ({
-                    id: item.id,
-                    units: item.units
-                }))
-            };
-        
-            const shouldConfirm = window.confirm('¿Quieres confirmar la compra?');
-            if (shouldConfirm) {
-                setIsLoading(true);
-                setErrorMessage('');
-                const response = await fetch('https://marten-gandolfo-laravel.vercel.app/_api/orders', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(order)
-                });
-                
-                if (response.ok) {
-                    handleToastSuccessShow();
-                    setCartItems([]);
-                } else {
-                    handleToastFailureShow();
-                    fetchProductDetails();
-                }
-                setIsLoading(false);
-            }
-        } catch (error) {
-            console.error('Error al realizar la orden:', error);
-            handleToastFailureShow();
-            setIsLoading(false);
-        }
-    };
     
+    const successfulPayment = () => {
+        handleToastSuccessShow();
+        setCartItems([]);
+    }
+
+    const errorPayment = () => {
+        handleToastFailureShow();
+    }
+
     const handleUnitsChange = (itemId, unitsChange) => {
         const updatedCartItems = cartItems.map(item => {
           if (item.id === itemId && item.units + unitsChange > 0) {
@@ -89,16 +63,12 @@ export default function CartPage(){
         });
         setCartItems(updatedCartItems);
     };
-
-    const handleEmailChange = event => {
-        setEmail(event.target.value);
-      };
         
     const fetchProductDetails = async () => {
         const productIds = cartItems.map(item => item.id);
         const products = {};
         const productRequests = productIds.map(id =>
-            fetch(`https://marten-gandolfo-laravel.vercel.app/_api/products/${id}`)
+            fetch(process.env.REACT_APP_API_URL + `_api/products/${id}`)
               .then(response => {
                 if(!response.ok) throw new Error('Producto no encontrado');
                 return response.json();
@@ -116,6 +86,12 @@ export default function CartPage(){
         setIsLoading(false);
     };
   
+    const getTotalPrice = () => {
+        const subtotals = cartItems.map(item => products[item.id] ? products[item.id].price * item.units : 0);
+        const totalPrice = subtotals.reduce((accumulator, currentValue) => accumulator + currentValue, 0);
+        return totalPrice.toFixed(2);
+    }
+
     useEffect(() => {
         fetchProductDetails();
       }, []);
@@ -123,11 +99,6 @@ export default function CartPage(){
     useEffect(() => {
         localStorage.setItem('cart', JSON.stringify(cartItems));
     }, [cartItems]);
-    
-    useEffect(() => {
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        setIsEmailValid(emailRegex.test(email));
-    }, [email]);
 
     useEffect(() => {
         if(products && products.deletedProducts)
@@ -154,23 +125,35 @@ export default function CartPage(){
                     </>
                 :
                     <>
-                        <CartTable cartItems={cartItems} products={products} handleUnitsChange={handleUnitsChange} handleRemoveItem={handleRemoveItem}/>
-                        
-                        <div class="card">
-                            <h5 class="card-header">Confirmar compra</h5>
-                            <div class="card-body">
-                                <h5 class="card-title">Ingrese su correo a continuacion</h5>
-                                <div class="input-group mb-3">
-                                    <input type="text" value={email} onChange={handleEmailChange} class="form-control" placeholder="Ingrese aquí su correo"/>
-                                    <button onClick={buyItems} disabled={!isEmailValid} class="btn btn-primary">Comprar</button>
+                        <CartTable cartItems={cartItems} products={products} handleUnitsChange={handleUnitsChange} handleRemoveItem={handleRemoveItem} getTotalPrice={getTotalPrice}/>
+                        {isAuthenticated ?
+                            <div>
+                                <div class="text-center mt-5">
+                                    <h5>Confirmar compra</h5>
+                                    <p>Al realizar esta compra usted confirma que ha leido los terminos y condiciones.</p>
                                 </div>
-                                <p class="card-text">Al realizar esta compra usted confirma que ha leido los terminos y condiciones.</p>
+                                    <MercadoPagoForm
+                                        cartItems={cartItems}
+                                        getTotalPrice={getTotalPrice}
+                                        errorPayment={errorPayment}
+                                        successfulPayment={successfulPayment}
+                                    />
                             </div>
-                        </div>
+                        :
+                            <div>
+                                <h3 class="m-4">Inicie sesión para comprar</h3>
+                                <div className="loginAndRegisterContainer">
+                                    <Login/>
+                                    <Register/>
+                                </div>
+                            </div>
+                        }
+
+                        
                     </>
             }
 
-            <ToastComponent id={'liveToastSuccess'} toastTitle={'Muchas gracias por su compra!'} toastBody={'Usted recibira un correo con informacion sobre su pedido en Master Gaming.'} addButton={false} buttonText={''} buttonLink={''}/>
+            <ToastComponent id={'liveToastSuccess'} toastTitle={'Muchas gracias por su compra!'} toastBody={'Su compra ha sido confirmada, podrá verla en la pestaña de Pedidos.'} addButton={false} buttonText={''} buttonLink={''}/>
 
             <ToastComponent id={'liveToastFailure'} toastTitle={'Lo sentimos! Hubo un error en su compra.'} toastBody={'Si el error periste comuniquese con el equipo de Master Gaming al correo mastergaming.sa@gmail.com.'} addButton={false} buttonText={''} buttonLink={''}/>
 

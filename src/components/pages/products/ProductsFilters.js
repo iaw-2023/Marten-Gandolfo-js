@@ -6,7 +6,7 @@ export default function ProductsFilters({categories, handleCategoryUpdate, handl
         <>
             <div class="filter-container">
                 <div class="filter-row">
-                    <select id="category_id" class="form-select" aria-label="Default select example" type="number" onChange={handleCategoryUpdate}>
+                    <select id="category_id" class="form-select mb-3" aria-label="Default select example" type="number" onChange={handleCategoryUpdate}>
                         <option value="-1" selected>Todas las categorias</option>
                         {categories && categories.map((category) => (<option value={category.id}>{category.name}</option>))}
                     </select>

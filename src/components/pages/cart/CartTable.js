@@ -1,11 +1,6 @@
 import { Link } from 'react-router-dom';
 
-export default function CartTable({cartItems, products, handleUnitsChange, handleRemoveItem}){
-    const getTotalPrice = () => {
-        const subtotals = cartItems.map(item => products[item.id] ? products[item.id].price * item.units : 0);
-        const totalPrice = subtotals.reduce((accumulator, currentValue) => accumulator + currentValue, 0);
-        return totalPrice.toFixed(2);
-    }
+export default function CartTable({cartItems, products, handleUnitsChange, handleRemoveItem, getTotalPrice}){
 
     return (
         <table class="table text-center align-middle">
@@ -23,7 +18,7 @@ export default function CartTable({cartItems, products, handleUnitsChange, handl
                     products[item.id] &&
                     <tr key={item.id}>
                         <td>
-                            <Link to={'/products/' + item.id}><img src={products[item.id].product_image} alt='' width="150" /></Link>
+                            <Link to={'/products/' + item.id}><img src={`data:image/webp;base64,${products[item.id].product_image}`} alt='' width="150" /></Link>
                         </td>
                         <td>
                             <Link to={'/products/' + item.id}>{products[item.id].name}</Link>

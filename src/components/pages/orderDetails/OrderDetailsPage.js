@@ -1,24 +1,23 @@
 import React, { useEffect, useState, useContext } from 'react';
 import { Link } from 'react-router-dom';
 import { useParams } from 'react-router-dom';
-import OrdersTable from './OrdersTable';
-import OrderDetailsTable from './OrderDetailsTable';
 import LoadingSpinner from '../../LoadingSpinner';
 import ErrorMessage from '../../ErrorMessage';
-import 'bootstrap/dist/css/bootstrap.css';
+import OrderDetailsTable from '../orders/OrderDetailsTable';
 import { AuthContext } from '../account/AuthProvider';
 import Login from '../account/Login';
 import Register from '../account/Register';
 
-function OrdersPage() {
-    const [orders, setOrders] = useState([]);
+export default function OrderDetailsPage(){
+    const { id } = useParams();
+    const [order, setOrder] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
     const [errorMessage, setErrorMessage] = useState('');
     const { isAuthenticated, setIsAuthenticated } = useContext(AuthContext);
 
-    const fetchOrders = () => {
+    const fetchOrder = () => {
         if(isAuthenticated)
-            fetch(process.env.REACT_APP_API_URL + '_api/orders', {
+            fetch(process.env.REACT_APP_API_URL + '_api/orders/' + id, {
                 method: 'GET',
                 headers: {
                     'Authorization': 'Bearer ' + localStorage.getItem('token'),
@@ -30,33 +29,31 @@ function OrdersPage() {
                         setIsAuthenticated(false);
                         return ;
                     }
-                    if(!response.ok){setErrorMessage('Error al cargar los pedidos'); return ;}
+                    if(!response.ok){setErrorMessage('Error al cargar el pedido'); return ;}
                     return response.json();
                 })
                 .then(data => {
-                    setOrders(data.orders);
+                    setOrder(data);
                     setIsLoading(false);
                 })
                 .catch(error => {
                     setIsLoading(false);
-                    setErrorMessage('Error al cargar los pedidos');
+                    setErrorMessage('Error al cargar el pedido');
                 });
     };
 
     useEffect(() => {
-        fetchOrders();
+        fetchOrder();
     }, []);
 
     useEffect(() => {
-        fetchOrders();
-    }, [isAuthenticated])
-
-    
+        fetchOrder()
+    }, [isAuthenticated]);
 
     return (
         <div>
             <div class="borderBottom text-center">
-                <h1>Pedidos</h1>
+                <h1>Detalle de Pedido</h1>
                 <img src="/shopping_bag.png" width="200px" alt="..."/>
             </div>
             {isAuthenticated ? (
@@ -66,30 +63,15 @@ function OrdersPage() {
                     errorMessage ?
                         <ErrorMessage errorMessage={errorMessage} />
                     :
-                        orders.length === 0 ?
-                            <>
-                                <h3 class="text-center">Todavía no hay nada por acá</h3>
-                                <div class="text-center">
-                                    <p>No sabes que comprar? Comprate todo!</p>
-                                    <Link type="button" to="/products" class="btn btn-primary btn-sm">Ver productos</Link>
-                                </div>
-                            </>
-                        :
-                            <OrdersTable orders={orders} />
+                        <OrderDetailsTable order={order} />
                 )
             :
                 <div>
-                    <h3 class="m-4">Inicie sesión para ver sus pedidos</h3>
-                    <div className="loginAndRegisterContainer">
-                        <Login/>
-                        <Register/>
-                    </div>
+                    <h3 class="m-4">Inicie sesión para ver su pedidos</h3>
+                    <Login />
+                    <Register />
                 </div>
             }
-            
-            
         </div>
     );
 }
-  
-export default OrdersPage;

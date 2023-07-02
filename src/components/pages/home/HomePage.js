@@ -3,6 +3,7 @@ import LoadingSpinner from "../../LoadingSpinner";
 import ProductCard from "./ProductCard";
 import { useEffect, useState } from "react";
 import ProductsCarousel from "./ProductsCarousel";
+import GameSearch from "./gameSearch/GameSearch";
 
 export default function HomePage() {
   const [products, setProducts] = useState([]);
@@ -10,9 +11,9 @@ export default function HomePage() {
   const [errorMessage, setErrorMessage] = useState('');
 
   useEffect(() => {
-    fetch('https://marten-gandolfo-laravel.vercel.app/_api/products/random/10')
+    fetch(process.env.REACT_APP_API_URL + '_api/products/random/10')
       .then(response => {
-        if(!response.ok) throw new Error('Error al cargar los productos');
+        if(!response.ok){setErrorMessage('Error al cargar los productos'); return ;}
         return response.json();
       })
       .then((data) => {
@@ -21,7 +22,7 @@ export default function HomePage() {
       })
       .catch(error => {
         setIsLoading(false);
-        setErrorMessage(error.message);
+        setErrorMessage('Error al cargar los productos');
     });
   }, []);
 
@@ -36,7 +37,10 @@ export default function HomePage() {
       ) : errorMessage ? (
         <ErrorMessage message={errorMessage} />
       ) : (
-        <ProductsCarousel products={products} />
+        <>
+          <GameSearch />
+          <ProductsCarousel products={products} />
+        </>
       )}
     </div>
   );
